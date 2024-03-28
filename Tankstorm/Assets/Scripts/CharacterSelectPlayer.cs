@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CharacterSelectPlayer : MonoBehaviour
@@ -8,6 +9,7 @@ public class CharacterSelectPlayer : MonoBehaviour
     [SerializeField] private int playerIndex;
     [SerializeField] private GameObject readyGameobject;
     [SerializeField] private PlayerRole playerRole;
+    [SerializeField] private TextMeshPro playerNameText;
 
 
 
@@ -60,8 +62,9 @@ public class CharacterSelectPlayer : MonoBehaviour
             if (playerData.roleId != 2)
             {
                 readyGameobject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-
             }
+
+            playerNameText.text = playerData.playerName.ToString();
 
             
         }

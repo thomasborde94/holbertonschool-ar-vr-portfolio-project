@@ -55,6 +55,7 @@ public class CharacterSelectReady : NetworkBehaviour
         {
             if (TankstormGameMultiplayer.Instance.EveryPlayerHaveRole())
             {
+                TankstormLobby.Instance.DeleteLobby();
                 TankstormGameManager.Instance.state.Value = TankstormGameManager.State.GamePlaying;
                 Loader.LoadNetwork(Loader.Scene.GameScene);
             }

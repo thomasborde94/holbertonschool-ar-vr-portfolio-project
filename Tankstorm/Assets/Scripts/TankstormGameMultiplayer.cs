@@ -9,6 +9,7 @@ public class TankstormGameMultiplayer : NetworkBehaviour
 {
 
     public const int MAX_PLAYER_AMOUNT = 2;
+    private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiPlayer";
 
     public static TankstormGameMultiplayer Instance;
 
@@ -20,6 +21,7 @@ public class TankstormGameMultiplayer : NetworkBehaviour
     [SerializeField] private GameObject playerPrefab;
 
     private NetworkList<PlayerData> playerDataNetworkList;
+    private string playerName;
 
 
     private void Awake()
@@ -29,7 +31,11 @@ public class TankstormGameMultiplayer : NetworkBehaviour
 
         playerDataNetworkList = new NetworkList<PlayerData>();
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+
+        playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
     }
+
+    
 
     // When PlayerDataNetworkList changes
     private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
@@ -80,6 +86,7 @@ public class TankstormGameMultiplayer : NetworkBehaviour
             clientId = clientId,
             roleId = GetFirstUnusedRoleId(),
         });
+        SetPlayerNameServerRpc(GetPlayerName());
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest,
@@ -104,7 +111,24 @@ public class TankstormGameMultiplayer : NetworkBehaviour
         OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Server_OnClientConnectedCallback;
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void NetworkManager_Server_OnClientConnectedCallback(ulong clientId)
+    {
+        SetPlayerNameServerRpc(GetPlayerName());
+    }
+
+    // Update playername on the server when client connects
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default)
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+        playerData.playerName = playerName;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
     }
 
     private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId)
@@ -209,6 +233,17 @@ public class TankstormGameMultiplayer : NetworkBehaviour
             }    
         }
         return true;
+    }
+
+
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+    public void SetPlayerName(string playerName)
+    {
+        this.playerName = playerName;
+        PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
     }
 
 }
