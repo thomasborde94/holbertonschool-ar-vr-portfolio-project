@@ -7,7 +7,7 @@ public class DebugScript : NetworkBehaviour
 {
     private void Update()
     {
-        Debug.Log(PlayerRoleString());
+        //Debug.Log(PlayerRoleString());
     }
     public string PlayerRoleString()
     {

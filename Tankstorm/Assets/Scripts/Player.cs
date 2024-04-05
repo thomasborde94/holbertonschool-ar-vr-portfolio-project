@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using System;
+using Cinemachine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Users;
 using System.Runtime.CompilerServices;
@@ -18,147 +19,60 @@ public class Player : NetworkBehaviour
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _rotateSpeed = 10f;
     [SerializeField] private float _towerRotationSpeed = 10f;
+    public float _maxHealth = 10;
+    public float _currentHealth = 10;
 
     [Header("Weapons")]
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private float _delayBetweenBulletShots = 1f;
     [SerializeField] private Transform _cannon;
-    [SerializeField] private float _destroyTime = 2f;
     [Header("Others")]
     [SerializeField] private Transform _tower;
     [Tooltip("Player will collide with this layer")][SerializeField] private LayerMask collisionsLayerMask;
     [SerializeField] private PlayerInputHandler inputHandler;
+    [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
 
 
 
     private float _nextShotTime = 0f;
+    private float _delayBeforeBulletDespawn = 2.5f;
     private PlayerData playerData;
 
-    public event EventHandler OnShootPressed;
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        /*
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        */
     }
 
     void Start()
     {
         inputHandler = PlayerInputHandler.Instance;
 
-        OnShootPressed += Player_OnShootPressed;
+        _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        if (_cinemachineCamera == null)
+            Debug.Log("could not find cinemachine camera");
+        else
+        {
+            _cinemachineCamera.m_LookAt = transform;
+            _cinemachineCamera.m_Follow = transform;
+        }
     }
 
     void Update()
     {
-        /*
-        if (IsClient)
-            Debug.Log("Créé côté client");
-        if (IsServer)
-            Debug.Log("Créé côté server");
-        //if (PlayerRoleString() == "Driver")
-        if (IsOwner)
-        {
-            Debug.Log("I am owner");
-        }
-        if (!IsOwner)
-        {
-            Debug.Log("not owner");
-        }
-        if (IsOwnedByServer)
-        {
-            Debug.Log("Server is owner");
-        }
-
-        if (!IsClient)
-        {
-            Debug.Log("inside !IsClient");
-        }
-        if (!IsServer)
-            Debug.Log("inside !IsServer");
-        if (IsLocalPlayer)
-        {
-            Debug.Log("inside IsLocalPlayer");
-            HandleMovement();
-        }
-        */
         if (PlayerRoleString() == "Driver")
         {
-            //HandleMovement();
             HandleMovementServerAuth();
         }
 
         else if (PlayerRoleString() == "Shooter")
         {
             HandleTowerRotationServerAuth();
-            //HandleTowerRotation();
-            //HandleShooting();
+            HandleShootingServerRpc();
         }
     }
 
-
-
-    private void HandleMovement()
-    {
-        Vector2 inputVector = inputHandler.MoveInput;
-        Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
-        float moveDistance = _moveSpeed * Time.deltaTime;
-        float playerRadius = 0.7f;
-        bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirection,
-            Quaternion.identity, moveDistance, collisionsLayerMask);
-
-        if (!canMove)
-        {
-            // Cannot move towards moveDir
-
-            // Attempt only X movement
-            Vector3 moveDirX = new Vector3(moveDirection.x, 0, 0).normalized;
-            canMove = (moveDirection.x < -.5f || moveDirection.x > +.5f) && !Physics.BoxCast(transform.position,
-                Vector3.one * playerRadius, moveDirX, Quaternion.identity, moveDistance, collisionsLayerMask);
-
-            if (canMove)
-            {
-                // Can move only on the X
-                moveDirection = moveDirX;
-            }
-            else
-            {
-                // Cannot move only on the X
-
-                // Attempt only Z movement
-                Vector3 moveDirZ = new Vector3(0, 0, moveDirection.z).normalized;
-                canMove = (moveDirection.z < -.5f || moveDirection.z > +.5f) && !Physics.BoxCast(transform.position,
-                    Vector3.one * playerRadius, moveDirZ, Quaternion.identity, moveDistance, collisionsLayerMask);
-
-                if (canMove)
-                {
-                    // Can move only on the Z
-                    moveDirection = moveDirZ;
-                }
-                else
-                {
-                    // Cannot move in any direction
-                }
-            }
-        }
-        if (canMove)
-        {
-            transform.position += moveDirection * moveDistance;
-        }
-        if (moveDirection != Vector3.zero)
-            transform.forward = Vector3.Slerp(transform.forward, moveDirection, Time.deltaTime * _rotateSpeed);
-    }
 
 
     private void HandleMovementServerAuth()
@@ -254,42 +168,40 @@ public class Player : NetworkBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(directionToMouse, Vector3.up);
         _tower.rotation = Quaternion.Slerp(_tower.rotation, targetRotation, _towerRotationSpeed * Time.deltaTime);
     }
-    private void HandleShooting()
+
+    [ServerRpc(RequireOwnership = false)]
+    private void HandleShootingServerRpc()
     {
         if (inputHandler.ShootInput)
         {
-            OnShootPressed?.Invoke(this, EventArgs.Empty);
+            if (_nextShotTime >= _delayBetweenBulletShots)
+            {
+                Firebullet();
+                _nextShotTime = 0f;
+            }
         }
         if (_nextShotTime < 5f)
             _nextShotTime += Time.deltaTime;
     }
 
-    private void Player_OnShootPressed(object sender, EventArgs e)
-    {
-        if (_nextShotTime >= _delayBetweenBulletShots)
-        {
-            Firebullet();
-            _nextShotTime = 0f;
-        }
-    }
-
     private void Firebullet()
     {
         Bullet newBullet = Instantiate(_bulletPrefab, _cannon.position, _cannon.rotation);
+        NetworkObject newbulletNO = newBullet.GetComponent<NetworkObject>();
+        newbulletNO.Spawn(true);
         newBullet.Shoot(_bulletSpeed);
-
-        Destroy(newBullet.gameObject, _destroyTime);
+        newBullet.DespawnWithDelay(_delayBeforeBulletDespawn);
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Vector2 inputVector = inputHandler.MoveInput;
-        float playerRadius = 0.7f;
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        Gizmos.DrawWireCube(transform.position + moveDir, new Vector3(playerRadius, playerRadius, playerRadius));
 
-        Ray ray = new Ray(_tower.position, _tower.transform.forward);
-        Gizmos.DrawRay(ray.origin, ray.direction * 10f);
+
+    public float GetCurrentHealthPart()
+    {
+        return (_currentHealth / _maxHealth);
+    }
+
+    public void SetCurrentHealthLoss(float healthAmountLost)
+    {
+        _currentHealth -= healthAmountLost;
     }
 
     // Gets the role of the player
