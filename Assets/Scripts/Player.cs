@@ -64,13 +64,19 @@ public class Player : NetworkBehaviour
         if (PlayerRoleString() == "Driver")
         {
             HandleMovementServerAuth();
+
         }
 
         else if (PlayerRoleString() == "Shooter")
         {
             HandleTowerRotationServerAuth();
-            HandleShootingServerRpc();
+            HandleShootingServerAuth(inputHandler.ShootInput);
+            Debug.Log("Calling inside Shooter if statement");
         }
+        else
+            Debug.Log("Player is not shooter nor driver, ERROR");
+
+
     }
 
 
@@ -169,23 +175,36 @@ public class Player : NetworkBehaviour
         _tower.rotation = Quaternion.Slerp(_tower.rotation, targetRotation, _towerRotationSpeed * Time.deltaTime);
     }
 
+    private void HandleShootingServerAuth(bool shootInput)
+    {
+        if (shootInput)
+        {
+            HandleShootingServerRpc();
+        }
+        if (_nextShotTime < 5f)
+        {
+            IncreaseNextShotTimeServerRpc();
+        }
+        
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void IncreaseNextShotTimeServerRpc()
+    {
+        _nextShotTime += Time.deltaTime;
+    }
     [ServerRpc(RequireOwnership = false)]
     private void HandleShootingServerRpc()
     {
-        if (inputHandler.ShootInput)
+        if (_nextShotTime >= _delayBetweenBulletShots)
         {
-            if (_nextShotTime >= _delayBetweenBulletShots)
-            {
-                Firebullet();
-                _nextShotTime = 0f;
-            }
+            Firebullet();
+            _nextShotTime = 0f;
         }
-        if (_nextShotTime < 5f)
-            _nextShotTime += Time.deltaTime;
     }
 
     private void Firebullet()
     {
+        Debug.Log("Called Firebullet");
         Bullet newBullet = Instantiate(_bulletPrefab, _cannon.position, _cannon.rotation);
         NetworkObject newbulletNO = newBullet.GetComponent<NetworkObject>();
         newbulletNO.Spawn(true);

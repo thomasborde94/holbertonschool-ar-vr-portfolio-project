@@ -42,9 +42,6 @@ public class Bullet : NetworkBehaviour
     public void Shoot(float Speed)
     {
         _bulletSpeed = Speed;
-        Debug.Log("called by isServer is : " + IsServer);
-        Debug.Log("called by isClient is : " + IsClient);
-        Debug.Log("called by isOwner is : " + IsOwner);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,11 +56,9 @@ public class Bullet : NetworkBehaviour
         {
             if (!isMissile)
             {
-
                 Enemy enemy = other.GetComponent<Enemy>();
-                enemy.SetCurrentHealthLoss(_bulletDamageToEnemies);
-                enemy.GotHit();
-                Destroy(gameObject);
+                //EnemyHitWithBulletServerRpc(enemy);
+                
             }
             else
             {
@@ -74,6 +69,15 @@ public class Bullet : NetworkBehaviour
             }
         }
     }
+    /*
+    [ServerRpc(RequireOwnership =false)]
+    private void EnemyHitWithBulletServerRpc(Enemy enemy)
+    {
+        enemy.SetCurrentHealthLoss(_bulletDamageToEnemies);
+        enemy.GotHit();
+        //Destroy(gameObject);
+    }
+    */
 
     public void DespawnWithDelay(float delay)
     {

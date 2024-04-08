@@ -11,9 +11,11 @@ public class EnemySpawner : NetworkBehaviour
     [SerializeField] private float _spawnAreaWidth = 8f;
     [SerializeField] private float _spawnAreaLength = 8f;
 
+    [SerializeField] public EnemyListSO _enemyListSO;
+
+    public int currentRound = 1;
     private float particlesTimer = 0f;
     private float enemyTimer = 0f;
-    private int currentRound = 1;
     private float _timeBetweenSpawn = 4f;
     private float _despawnTimer = 0f;
 
@@ -77,5 +79,6 @@ public class EnemySpawner : NetworkBehaviour
         GameObject enemy = Instantiate(enemyPrefabs[enemyIndex], spawnPosition, Quaternion.identity);
         NetworkObject enemyNO = enemy.GetComponent<NetworkObject>();
         enemyNO.Spawn(true);
+        _enemyListSO.AddEnemy(enemy);
     }
 }
