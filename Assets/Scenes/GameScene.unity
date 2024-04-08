@@ -2381,6 +2381,7 @@ MonoBehaviour:
   _timeBetweenSpawnRank: 4
   _spawnAreaWidth: 16
   _spawnAreaLength: 16
+  _enemyListSO: {fileID: 11400000, guid: 037015869ba40bb4c8236e4d8f0bb21d, type: 2}
   currentRound: 1
 --- !u!114 &991163488
 MonoBehaviour:

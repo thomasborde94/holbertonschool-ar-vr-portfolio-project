@@ -71,7 +71,6 @@ public class Player : NetworkBehaviour
         {
             HandleTowerRotationServerAuth();
             HandleShootingServerAuth(inputHandler.ShootInput);
-            Debug.Log("Calling inside Shooter if statement");
         }
         else
             Debug.Log("Player is not shooter nor driver, ERROR");
@@ -204,7 +203,6 @@ public class Player : NetworkBehaviour
 
     private void Firebullet()
     {
-        Debug.Log("Called Firebullet");
         Bullet newBullet = Instantiate(_bulletPrefab, _cannon.position, _cannon.rotation);
         NetworkObject newbulletNO = newBullet.GetComponent<NetworkObject>();
         newbulletNO.Spawn(true);

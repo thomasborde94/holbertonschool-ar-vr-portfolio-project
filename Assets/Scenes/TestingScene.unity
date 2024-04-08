@@ -354,6 +354,16 @@ PrefabInstance:
       propertyPath: targetTransform
       value: 
       objectReference: {fileID: 196045162}
+    - target: {fileID: 5290904419279700192, guid: 3478b9066c259af479dc39327af9b2bd,
+        type: 3}
+      propertyPath: isDriver
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5290904419279700192, guid: 3478b9066c259af479dc39327af9b2bd,
+        type: 3}
+      propertyPath: isShooter
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8767728486788649612, guid: 3478b9066c259af479dc39327af9b2bd,
         type: 3}
       propertyPath: m_Name
@@ -663,6 +673,8 @@ MonoBehaviour:
   _timeBetweenSpawnRank: 4
   _spawnAreaWidth: 16
   _spawnAreaLength: 16
+  _enemyListSO: {fileID: 0}
+  currentRound: 1
 --- !u!114 &1485498821
 MonoBehaviour:
   m_ObjectHideFlags: 0

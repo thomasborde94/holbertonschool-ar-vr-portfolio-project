@@ -14,6 +14,8 @@ public class Bullet : NetworkBehaviour
     [SerializeField] private SphereCollider _aoeCollider;
     [SerializeField] private GameObject _missileExplosionParticles;
 
+    [SerializeField] private EnemyListSO _enemyListSO;
+
     #region Private
 
     private Rigidbody _rigidbody;
@@ -57,8 +59,8 @@ public class Bullet : NetworkBehaviour
             if (!isMissile)
             {
                 Enemy enemy = other.GetComponent<Enemy>();
-                //EnemyHitWithBulletServerRpc(enemy);
-                
+                EnemyHitWithBulletServerRpc(enemy.index);
+
             }
             else
             {
@@ -69,15 +71,18 @@ public class Bullet : NetworkBehaviour
             }
         }
     }
-    /*
+    
     [ServerRpc(RequireOwnership =false)]
-    private void EnemyHitWithBulletServerRpc(Enemy enemy)
+    private void EnemyHitWithBulletServerRpc(int enemyListIndex)
     {
-        enemy.SetCurrentHealthLoss(_bulletDamageToEnemies);
-        enemy.GotHit();
+        GameObject enemy = _enemyListSO.GetEnemy(enemyListIndex);
+        Debug.Log(enemy.name);
+        Enemy enemyScript = enemy.GetComponent<Enemy>();
+        enemyScript.SetCurrentHealthLoss(_bulletDamageToEnemies);
+        enemyScript.GotHit();
         //Destroy(gameObject);
     }
-    */
+
 
     public void DespawnWithDelay(float delay)
     {

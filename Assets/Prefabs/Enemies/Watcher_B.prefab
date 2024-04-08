@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3653352291366205815}
   - component: {fileID: -5127786013141206103}
   - component: {fileID: 6747620772468018456}
+  - component: {fileID: 9152705052334617092}
+  - component: {fileID: 2195195800835827831}
   m_Layer: 0
   m_Name: Watcher_B
   m_TagString: Enemy
@@ -70,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2948727222
+  GlobalObjectIdHash: 2220693153
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -95,10 +97,74 @@ MonoBehaviour:
   _speed: 4
   _rangeToAttack: 7
   _rangeToStopMoving: 5
+  index: 0
   isDead: 0
   _maxHealth: 10
   _currentHealth: 10
   distance: 0
+--- !u!95 &9152705052334617092
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618443084505056415}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2195195800835827831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2618443084505056415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e86c35bb91b091042a037e4c595b7f44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1640423525
+    DestinationState: 651216299
+    TransitionDuration: 0.15579712
+    TriggerNameHash: 1080829965
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1523721793
+    DestinationState: 651216299
+    TransitionDuration: 0.25
+    TriggerNameHash: 1080829965
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1919845803
+    DestinationState: 651216299
+    TransitionDuration: 0.11239517
+    TriggerNameHash: 1080829965
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 651216299
+    DestinationState: 1523721793
+    TransitionDuration: 0.25
+    TriggerNameHash: 1654612129
+    TransitionIndex: 0
+  m_Animator: {fileID: 2622189938520074405}
 --- !u!1 &4476525721995997336
 GameObject:
   m_ObjectHideFlags: 0

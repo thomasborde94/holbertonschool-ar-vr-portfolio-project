@@ -15,6 +15,7 @@ public abstract class Enemy : NetworkBehaviour
     [SerializeField] protected float _rangeToStopMoving;
 
     protected Transform _transform;
+    public int index;
 
     protected bool isHit = false;
     protected bool canMove = true;

@@ -12,6 +12,7 @@ public class EnemySpawner : NetworkBehaviour
     [SerializeField] private float _spawnAreaLength = 8f;
 
     [SerializeField] public EnemyListSO _enemyListSO;
+    private int index = 0;
 
     public int currentRound = 1;
     private float particlesTimer = 0f;
@@ -25,6 +26,7 @@ public class EnemySpawner : NetworkBehaviour
     private void Start()
     {
         _timeBetweenSpawn = _timeBetweenSpawnRank * (1.5f / currentRound);
+        _enemyListSO.Clear();
     }
 
     private void Update()
@@ -80,5 +82,7 @@ public class EnemySpawner : NetworkBehaviour
         NetworkObject enemyNO = enemy.GetComponent<NetworkObject>();
         enemyNO.Spawn(true);
         _enemyListSO.AddEnemy(enemy);
+        enemy.GetComponent<Enemy>().index = index;
+        index++;
     }
 }
