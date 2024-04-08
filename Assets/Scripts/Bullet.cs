@@ -59,7 +59,8 @@ public class Bullet : NetworkBehaviour
             if (!isMissile)
             {
                 Enemy enemy = other.GetComponent<Enemy>();
-                EnemyHitWithBulletServerRpc(enemy.index);
+                if (enemy != null)
+                    EnemyHitWithBulletServerRpc(enemy.index);
 
             }
             else
@@ -76,11 +77,13 @@ public class Bullet : NetworkBehaviour
     private void EnemyHitWithBulletServerRpc(int enemyListIndex)
     {
         GameObject enemy = _enemyListSO.GetEnemy(enemyListIndex);
-        Debug.Log(enemy.name);
-        Enemy enemyScript = enemy.GetComponent<Enemy>();
-        enemyScript.SetCurrentHealthLoss(_bulletDamageToEnemies);
-        enemyScript.GotHit();
-        //Destroy(gameObject);
+        if (enemy != null)
+        {
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            enemyScript.SetCurrentHealthLoss(_bulletDamageToEnemies);
+            enemyScript.GotHit();
+        }
+        
     }
 
 
