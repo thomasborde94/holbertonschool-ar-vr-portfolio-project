@@ -16,32 +16,54 @@ public class Player : NetworkBehaviour
     public float speed = 10f;
 
     [Header("Player")]
-    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private FloatVariable _moveSpeed;
     [SerializeField] private float _rotateSpeed = 10f;
     [SerializeField] private float _towerRotationSpeed = 10f;
     public float _maxHealth = 10;
     public float _currentHealth = 10;
 
-    [Header("Weapons")]
+    [Header("Bullet")]
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private float _bulletSpeed;
-    [SerializeField] private float _delayBetweenBulletShots = 1f;
+    [SerializeField] private FloatVariable _bulletCd;
     [SerializeField] private Transform _cannon;
+    [Header("Mine")]
+    [SerializeField] private GameObject _minePrefab;
+    [SerializeField] private FloatVariable _mineCooldown;
+    [Header("AOEMissile")]
+    [SerializeField] private Bullet _aoeMissilePrefab;
+    [SerializeField] private float _aoeMissileSpeed = 5f;
+    [SerializeField] private FloatVariable _aoeMissileCooldown;
+    [Header("Rain")]
+    [SerializeField] private FloatVariable _rainCooldown;
+    [SerializeField] private float _rainDuration = 3f;
+    [SerializeField] private GameObject _rainPrefab;
+    [SerializeField] private LayerMask targetLayer;
+    [Header("Shockwave")]
+    [SerializeField] private Shockwave _shockwave;
+    [SerializeField] private FloatVariable _shockwaveCooldown;
     [Header("Others")]
     [SerializeField] private Transform _tower;
     [Tooltip("Player will collide with this layer")][SerializeField] private LayerMask collisionsLayerMask;
     [SerializeField] private PlayerInputHandler inputHandler;
     [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
 
+    public int coinAmount = 0;
+
 
 
     private float _nextShotTime = 0f;
+    private float _nextAOEMissileTime = 2f;
+    private float _nextRainTime = 2f;
+    private float _nextShockwaveTime = 2f;
+    private float _nextMineTime = 2f;
     private float _delayBeforeBulletDespawn = 2.5f;
     private PlayerData playerData;
 
     private void Awake()
     {
         Instance = this;
+        coinAmount = 0;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -61,21 +83,22 @@ public class Player : NetworkBehaviour
 
     void Update()
     {
-        if (PlayerRoleString() == "Driver")
+        if (PlayerRoleString() == "Driver" && TankstormGameManager.Instance.state.Value == TankstormGameManager.State.GamePlaying)
         {
             HandleMovementServerAuth();
-
+            HandleMineServerAuth(inputHandler.Skill1Input);
+            HandleShockwaveServerAuth(inputHandler.Skill2Input);
         }
 
-        else if (PlayerRoleString() == "Shooter")
+        else if (PlayerRoleString() == "Shooter" && TankstormGameManager.Instance.state.Value == TankstormGameManager.State.GamePlaying)
         {
             HandleTowerRotationServerAuth();
             HandleShootingServerAuth(inputHandler.ShootInput);
+            HandleAOEMissileServerAuth(inputHandler.Skill1Input);
+            HandleRainServerAuth(inputHandler.Skill2Input);
         }
         else
-            Debug.Log("Player is not shooter nor driver, ERROR");
-
-
+            Debug.Log("In Choosing skills ui");
     }
 
 
@@ -90,7 +113,7 @@ public class Player : NetworkBehaviour
     private void HandleMovementServerRpc(Vector2 inputVector)
     {
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
-        float moveDistance = _moveSpeed * Time.deltaTime;
+        float moveDistance = _moveSpeed.value * Time.deltaTime;
         float playerRadius = 0.7f;
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirection,
             Quaternion.identity, moveDistance, collisionsLayerMask);
@@ -144,21 +167,6 @@ public class Player : NetworkBehaviour
         HandleTowerRotationServerRpc(mousePosition);
     }
 
-    private void HandleTowerRotation()
-    {
-        // Get mousePosition in world space
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
-
-        // Get mousePosition on X-Z plane
-        Vector3 mousePositionHorizontal = new Vector3(mousePosition.x, _tower.position.y, mousePosition.z);
-
-        // Get direction between tower position and mouse position
-        Vector3 directionToMouse = mousePositionHorizontal - _tower.position;
-
-        // Apply rotation
-        Quaternion targetRotation = Quaternion.LookRotation(directionToMouse, Vector3.up);
-        _tower.rotation = Quaternion.Slerp(_tower.rotation, targetRotation, _towerRotationSpeed * Time.deltaTime);
-    }
 
     [ServerRpc(RequireOwnership = false)]
     private void HandleTowerRotationServerRpc(Vector3 mousePosition)
@@ -191,10 +199,16 @@ public class Player : NetworkBehaviour
     {
         _nextShotTime += Time.deltaTime;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void IncreaseNextAOEMissileTimeServerRpc()
+    {
+        _nextAOEMissileTime += Time.deltaTime;
+    }
     [ServerRpc(RequireOwnership = false)]
     private void HandleShootingServerRpc()
     {
-        if (_nextShotTime >= _delayBetweenBulletShots)
+        if (_nextShotTime >= _bulletCd.value)
         {
             Firebullet();
             _nextShotTime = 0f;
@@ -210,6 +224,147 @@ public class Player : NetworkBehaviour
         newBullet.DespawnWithDelay(_delayBeforeBulletDespawn);
     }
 
+    private void HandleAOEMissileServerAuth(bool skill1Input)
+    {
+        if (skill1Input)
+        {
+            HandleFireAOEMissileServerRpc();
+        }
+        if (_nextAOEMissileTime < 5f)
+        {
+            IncreaseNextAOEMissileTimeServerRpc();
+        }  
+    }
+
+    private void HandleShockwaveServerAuth(bool skill2Input)
+    {
+        if (skill2Input)
+        {
+            HandleShockwaveServerRpc();
+        }
+        if (_nextShockwaveTime < 5f)
+            IncreaseNextShockwaveTimeServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void HandleShockwaveServerRpc()
+    {
+        if (_nextShockwaveTime >= _shockwaveCooldown.value)
+        {
+            CallBlastClientRpc();
+            _nextShockwaveTime = 0f;
+        }
+    }
+
+    [ClientRpc]
+    private void CallBlastClientRpc()
+    {
+        _shockwave._lineRenderer.enabled = true;
+        StartCoroutine(_shockwave.Blast());
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void IncreaseNextShockwaveTimeServerRpc()
+    {
+        _nextShockwaveTime += Time.deltaTime;
+    }
+    private void HandleMineServerAuth(bool skill1Input)
+    {
+        if (skill1Input)
+        {
+            HandleMineServerRpc();
+        }
+        if (_nextMineTime < 5f)
+            IncreaseNextMineTimeServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void HandleMineServerRpc()
+    {
+        if (_nextMineTime >= _mineCooldown.value)
+        {
+            GameObject mine = Instantiate(_minePrefab, transform.position, Quaternion.identity);
+            NetworkObject mineNo = mine.GetComponent<NetworkObject>();
+            mineNo.Spawn(true);
+            _nextMineTime = 0f;
+        }
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void IncreaseNextMineTimeServerRpc()
+    {
+        if (_nextMineTime >= 10f)
+            _nextMineTime = 10f;
+        else
+            _nextMineTime += Time.deltaTime;
+    }
+
+    private void HandleRainServerAuth(bool skill2Input)
+    {
+        if (skill2Input)
+        {
+            Vector3 mousePosition = inputHandler.GetLocalMousePosition();
+            HandleRainServerRpc(mousePosition);
+        }
+        if (_nextRainTime < 5f)
+        {
+            IncreaseNextRainTimeServerRpc();
+        }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void HandleRainServerRpc(Vector3 mousePosition, ServerRpcParams serverRpcParams = default)
+    {
+        if (_nextRainTime >= _rainCooldown.value)
+        {
+            Debug.Log(mousePosition);
+            FireRain(mousePosition);
+            _nextRainTime = 0;
+        }
+    }
+
+
+    private void FireRain(Vector3 mousePosition)
+    {
+        Debug.Log("called firerain");
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, targetLayer))
+        {
+            Debug.Log(hit.collider);
+            if (hit.collider != null)
+            {
+                Debug.Log("managed to instantiate");
+                GameObject rain = Instantiate(_rainPrefab, hit.point, Quaternion.identity);
+                NetworkObject rainNO = rain.GetComponent<NetworkObject>();
+                rainNO.Spawn(true);
+                //Destroy(rain, _rainDuration);
+                StartCoroutine(DespawnCoroutine(rainNO, _rainDuration));
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void IncreaseNextRainTimeServerRpc()
+    {
+        _nextRainTime += Time.deltaTime;
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void HandleFireAOEMissileServerRpc()
+    {
+        if (_nextAOEMissileTime >= _aoeMissileCooldown.value)
+        {
+            FireAOEMissile();
+            _nextAOEMissileTime = 0f;
+        }
+    }
+
+    private void FireAOEMissile()
+    {
+        Bullet newMissile = Instantiate(_aoeMissilePrefab, _cannon.position, _cannon.rotation);
+        NetworkObject newMissileNO = newMissile.GetComponent<NetworkObject>();
+        newMissileNO.Spawn(true);
+        newMissile.Shoot(_aoeMissileSpeed);
+        newMissile.DespawnWithDelay(_delayBeforeBulletDespawn);
+    }
 
     public float GetCurrentHealthPart()
     {
@@ -233,6 +388,20 @@ public class Player : NetworkBehaviour
             return "Shooter";
         else
             return "ERROR";
+    }
+
+    public void DespawnWithDelay(NetworkObject networkObject, float delay)
+    {
+        StartCoroutine(DespawnCoroutine(networkObject, delay));
+    }
+    private IEnumerator DespawnCoroutine(NetworkObject networkObject, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (networkObject.IsSpawned)
+        {
+            networkObject.Despawn();
+        }
     }
 
 }

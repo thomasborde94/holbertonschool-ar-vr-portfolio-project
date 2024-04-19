@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class Rain : NetworkBehaviour
 {
     [SerializeField] private float _damageTickCooldown = 1f;
-    [SerializeField] private int _rainDamage = 1;
+    [SerializeField] private IntVariable _rainDamage;
 
     private float _nextTickTime = 0f;
 
@@ -31,8 +31,9 @@ public class Rain : NetworkBehaviour
     {
         if (_nextTickTime >= _damageTickCooldown)
         {
-            enemy.GotHit();
-            enemy.SetCurrentHealthLoss(_rainDamage);
+            enemy.GotHitServerRpc();
+            //enemy.SetCurrentHealthLossClientRpc(_rainDamage);
+            enemy.SetCurrentHealthLossServerRpc(_rainDamage.value);
             _nextTickTime = 0f;
         }
     }

@@ -5,11 +5,12 @@ using UnityEngine;
 public class Shockwave : MonoBehaviour
 {
     [SerializeField] int _pointsCount;
-    [SerializeField] float _maxRadius;
+    [SerializeField] FloatVariable _maxRadius;
+    [SerializeField] FloatVariable _maxRadiusHitbox;
     [SerializeField] float _speed;
     [SerializeField] float _startWidth;
 
-    [SerializeField] private int _shockwaveDamage = 2;
+    [SerializeField] private IntVariable _shockwaveDamage;
     public LineRenderer _lineRenderer;
     public SphereCollider _sphereCollider;
 
@@ -24,12 +25,13 @@ public class Shockwave : MonoBehaviour
     {
         _lineRenderer.enabled = false;
         _sphereCollider.enabled = false;
+        _sphereCollider.radius = _maxRadiusHitbox.value;
     }
     public IEnumerator Blast()
     {
         _sphereCollider.enabled = true;
         float currentRadius = 0f;
-        while (currentRadius < _maxRadius)
+        while (currentRadius < _maxRadius.value)
         {
             currentRadius += Time.deltaTime * _speed;
             Draw(currentRadius);
@@ -50,7 +52,7 @@ public class Shockwave : MonoBehaviour
             _lineRenderer.SetPosition(i, position);
         }
 
-        _lineRenderer.widthMultiplier = Mathf.Lerp(0f, _startWidth, 1f - currentRadius / _maxRadius);
+        _lineRenderer.widthMultiplier = Mathf.Lerp(0f, _startWidth, 1f - currentRadius / _maxRadius.value);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,8 +62,9 @@ public class Shockwave : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.SetCurrentHealthLoss(_shockwaveDamage);
-                enemy.GotHit();
+                //enemy.SetCurrentHealthLossClientRpc(_shockwaveDamage);
+                enemy.SetCurrentHealthLossServerRpc(_shockwaveDamage.value);
+                enemy.GotHitServerRpc();
             }
         }
     }

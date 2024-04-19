@@ -59,8 +59,6 @@ public class CharacterSelectReady : NetworkBehaviour
                 TankstormGameManager.Instance.state.Value = TankstormGameManager.State.GamePlaying;
                 Loader.LoadNetwork(Loader.Scene.GameScene);
             }
-            else
-                Debug.Log("feur");
         }
 
     }

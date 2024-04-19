@@ -152,10 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointsCount: 60
-  _maxRadius: 3
+  _maxRadius: {fileID: 11400000, guid: a4cdd0dd9be0b9d4a8cc12917e7e2687, type: 2}
   _speed: 10
   _startWidth: 1
-  _shockwaveDamage: 2
+  _shockwaveDamage: {fileID: 11400000, guid: e5360de661e7d4f4e992c24a855af70b, type: 2}
   _lineRenderer: {fileID: 0}
   _sphereCollider: {fileID: 0}
 --- !u!135 &3662791507617976380
@@ -177,7 +177,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.8
+  m_Radius: 3.6
   m_Center: {x: 0, y: 0, z: 0.5000001}
 --- !u!54 &7661174279772774511
 Rigidbody:

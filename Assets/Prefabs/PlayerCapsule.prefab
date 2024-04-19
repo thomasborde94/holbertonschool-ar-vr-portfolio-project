@@ -298,8 +298,8 @@ MonoBehaviour:
   collisionsLayerMask:
     serializedVersion: 2
     m_Bits: 0
-  isDriver: 0
-  isShooter: 1
+  isDriver: 1
+  isShooter: 0
 --- !u!136 &6397659958129696033
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -358,6 +358,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 577180965027839183}
     m_Modifications:
+    - target: {fileID: 2122957505040904619, guid: f9e71f3e01cf8d84f84d35de0fbf5c56,
+        type: 3}
+      propertyPath: _maxRadius
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3662791507617976380, guid: f9e71f3e01cf8d84f84d35de0fbf5c56,
+        type: 3}
+      propertyPath: m_Radius
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7939607358524419197, guid: f9e71f3e01cf8d84f84d35de0fbf5c56,
         type: 3}
       propertyPath: m_Name
@@ -448,6 +458,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 549229372576721968, guid: a88b7f6a14e521b46a455ac4ab361453,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5334876949900794218, guid: a88b7f6a14e521b46a455ac4ab361453,
         type: 3}

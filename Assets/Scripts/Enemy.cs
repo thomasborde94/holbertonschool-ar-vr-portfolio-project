@@ -4,15 +4,20 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public abstract class Enemy : NetworkBehaviour
 {
     [SerializeField] protected Animator _anim;
 
-    [SerializeField] protected int _health;
+    //[SerializeField] protected int _health;
     [SerializeField] protected float _speed;
     [SerializeField] protected float _rangeToAttack;
     [SerializeField] protected float _rangeToStopMoving;
+    [Header("Coins Drop")]
+    [SerializeField] GameObject _coinPrefab;
+    [SerializeField] int _coinsAmountDropped = 5;
+    [SerializeField] float _coinSpawnRadius = 1.5f;
 
     protected Transform _transform;
     public int index;
@@ -22,25 +27,31 @@ public abstract class Enemy : NetworkBehaviour
     protected Transform _player;
     public bool isDead = false;
     public float _maxHealth = 10;
-    public float _currentHealth = 10;
+    [SerializeField] public NetworkVariable<int> _currentHealth = new NetworkVariable<int>();
 
     private float resetTriggerTime = 0.5f;
+    private bool droppedCoin = false;
+    private List<GameObject> droppedCoins = new List<GameObject>();
     public float distance;
 
-    #region Unity Lifecycle
-
-
-    private void Start() // ICI ONNETWORK SPAWN
+    private void Start()
     {
         Init();
     }
 
-    
+    public override void OnNetworkSpawn()
+    {
+        Init();
+        base.OnNetworkSpawn();
+    }
+
+
 
     public virtual void Init()
     {
         _transform = GetComponent<Transform>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        _currentHealth.Value = 10 * EnemySpawner.Instance.currentRound * 2;
     }
 
     public virtual void Update()
@@ -52,16 +63,20 @@ public abstract class Enemy : NetworkBehaviour
             Movement();
         }
         else
-            TriggerDeath();
+            TriggerDeathServerRpc();
 
     }
 
-    #endregion
-
-    private void TriggerDeath()
+    [ServerRpc(RequireOwnership = false)]
+    private void TriggerDeathServerRpc()
     {
         _anim.SetBool("Dead", true);
         Destroy(gameObject, 3f);
+        if (!droppedCoin)
+        {
+            DropCoins();
+        }
+            
     }
 
     public virtual void Movement()
@@ -76,7 +91,7 @@ public abstract class Enemy : NetworkBehaviour
                     _speed * Time.deltaTime);
             }
 
-            
+
             if (distance > _rangeToAttack)
             {
                 _anim.SetBool("Move", true);
@@ -91,12 +106,12 @@ public abstract class Enemy : NetworkBehaviour
 
                 StartCoroutine(ResetAttackTrigger(resetTriggerTime));
 
-                
+
             }
         }
         else
             Debug.Log("cant find player");
-        
+
     }
 
     private IEnumerator ResetAttackTrigger(float delay)
@@ -105,10 +120,11 @@ public abstract class Enemy : NetworkBehaviour
         _anim.ResetTrigger("Attack"); //
     }
 
-    public void GotHit()
+    [ServerRpc(RequireOwnership = false)]
+    public void GotHitServerRpc()
     {
-        if (_currentHealth <= 0)
-            isDead = true;
+        if (_currentHealth.Value <= 0)
+            SetIsDeadClientRpc(true);
 
         else
             _anim.SetTrigger("Hit");
@@ -120,7 +136,7 @@ public abstract class Enemy : NetworkBehaviour
                 _anim.GetCurrentAnimatorStateInfo(0).IsName("attack1withhitbox") ||
                 _anim.GetCurrentAnimatorStateInfo(0).IsName("hit"))
             return false;
-        if (distance < _rangeToStopMoving )
+        if (distance < _rangeToStopMoving)
             return false;
         else
             return true;
@@ -136,12 +152,70 @@ public abstract class Enemy : NetworkBehaviour
 
     public float GetCurrentHealthPart()
     {
-        return (_currentHealth / _maxHealth);
+        return (_currentHealth.Value / _maxHealth);
     }
 
-    public void SetCurrentHealthLoss(float healthAmountLost)
+    /*
+    [ClientRpc]
+    public void SetCurrentHealthLossClientRpc(int healthAmountLost, ClientRpcParams clientRpcParams = default)
     {
-        _currentHealth -= healthAmountLost;
+        _currentHealth.Value -= healthAmountLost;
+    }
+    */
+    [ServerRpc(RequireOwnership =true)]
+    public void SetCurrentHealthLossServerRpc(int healthAmountLost, ServerRpcParams serverRpcParams = default)
+    {
+        Debug.Log("SetCurrentHealthLossServerRpc is called");
+        _currentHealth.Value -= healthAmountLost;
+    }
+    [ClientRpc]
+    public void SetIsDeadClientRpc(bool value, ClientRpcParams clientRpcParams = default)
+    {
+        isDead = value;
+    }
+
+    private void DropCoins()
+    {
+        for (int i = 0; i < _coinsAmountDropped; i++)
+        {
+            Vector3 randomOffset = UnityEngine.Random.insideUnitSphere * _coinSpawnRadius;
+            Vector3 coinSpawnPosition = transform.position + randomOffset;
+            GameObject coin = Instantiate(_coinPrefab, coinSpawnPosition + new Vector3(0, _coinSpawnRadius, 0), Quaternion.identity);
+            NetworkObject coinNO = coin.GetComponent<NetworkObject>();
+            coinNO.Spawn();
+            droppedCoins.Add(coin);
+
+            Rigidbody coinRigidbody = coin.GetComponent<Rigidbody>();
+            if (coinRigidbody != null)
+            {
+                coinRigidbody.AddForce(UnityEngine.Random.insideUnitSphere * 5f, ForceMode.Impulse);
+            }
+        }
+        droppedCoin = true;
+        StartCoroutine(GatherCoins());
+    }
+
+    private IEnumerator GatherCoins()
+    {
+        yield return new WaitForSeconds(1f);
+        float lerpTime = 4f; // Temps en secondes pour que les pièces atteignent le joueur
+        float elapsedTime = 0f;
+
+        while (elapsedTime < lerpTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            foreach (GameObject coin in droppedCoins)
+            {
+                Vector3 currentPosition = coin.transform.position;
+
+                coin.transform.position = Vector3.Lerp(currentPosition, _player.position, elapsedTime / lerpTime);
+            }
+
+            yield return null;
+        }
+
+        droppedCoins.Clear();
     }
 
 }

@@ -80,4 +80,7 @@ public class PlayerInputHandler : MonoBehaviour
     private InputAction shootAction;
     private InputAction skill1Action;
     private InputAction skill2Action;
+
+    public Vector3 GetLocalMousePosition()
+    { return Input.mousePosition; }
 }

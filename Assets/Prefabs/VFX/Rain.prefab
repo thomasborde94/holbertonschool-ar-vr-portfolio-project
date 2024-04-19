@@ -4950,4 +4950,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageTickCooldown: 0.7
-  _rainDamage: 1
+  _rainDamage: {fileID: 11400000, guid: ee79c31ce34a7614f8185c9641fe6a27, type: 2}

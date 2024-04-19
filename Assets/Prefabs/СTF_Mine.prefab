@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26726aa75e3e944d89bc5600802f24a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mineDamage: 7
+  _mineDamage: {fileID: 11400000, guid: a5e3bb43c0cc27e4fb5138e0a7f902e6, type: 2}
   _explosionParticles: {fileID: 8593840057275458084, guid: d189d618dbb65174ca5a2140a6adc4f9,
     type: 3}
 --- !u!54 &3638508866121293735
@@ -168,5 +168,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.47674322, y: 0.41958222, z: 0.49032348}
-  m_Center: {x: -0.03748259, y: 0.20979108, z: -0.025218844}
+  m_Size: {x: 0.64066446, y: 0.41958222, z: 0.64624834}
+  m_Center: {x: -0.019491255, y: 0.20979108, z: -0.031216145}

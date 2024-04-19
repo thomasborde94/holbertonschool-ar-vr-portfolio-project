@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour
 {
-    [SerializeField] private int _bulletDamageToEnemies = 4;
+    [SerializeField] private IntVariable _bulletDamageToEnemies;
     [SerializeField] private int _bulletDamageToPlayer = 1;
 
 
@@ -60,8 +60,7 @@ public class Bullet : NetworkBehaviour
             {
                 Enemy enemy = other.GetComponent<Enemy>();
                 if (enemy != null)
-                    EnemyHitWithBulletServerRpc(enemy.index);
-
+                      EnemyHitWithBulletServerRpc(enemy.index);
             }
             else
             {
@@ -80,8 +79,9 @@ public class Bullet : NetworkBehaviour
         if (enemy != null)
         {
             Enemy enemyScript = enemy.GetComponent<Enemy>();
-            enemyScript.SetCurrentHealthLoss(_bulletDamageToEnemies);
-            enemyScript.GotHit();
+            //enemyScript.SetCurrentHealthLossClientRpc(_bulletDamageToEnemies);
+            enemyScript.SetCurrentHealthLossServerRpc(_bulletDamageToEnemies.value);
+            enemyScript.GotHitServerRpc();
         }
         
     }

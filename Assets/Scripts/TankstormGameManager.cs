@@ -10,21 +10,22 @@ public class TankstormGameManager : NetworkBehaviour
 {
     public static TankstormGameManager Instance { get; private set; }
 
-    //public event EventHandler OnStateChanged;
-    //public event EventHandler OnGameStarting;
     public event EventHandler OnLocalPlayerReadyChanged;
-
 
     public NetworkVariable<State> state = new NetworkVariable<State>(State.BeforePlaying);
     public bool isLocalPlayerReady;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
+    private float gamePlayingTimerMax = 10f;
+    private bool justStartedRound = true;
+    private bool justAddedRound = false;
 
-    private NetworkVariable<float> countdownToStartTimer = new NetworkVariable<float>(1f);
 
     public enum State
     {
         BeforePlaying,
         WaitingToStart,
         GamePlaying,
+        ChoosingSkills,
     }
 
     private Dictionary<ulong, bool> playerReadyDictionary;
@@ -35,12 +36,9 @@ public class TankstormGameManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
 
         playerReadyDictionary = new Dictionary<ulong, bool>();
+
     }
 
-    private void Start()
-    {
-        
-    }
     private void Update()
     {
         if (!IsServer)
@@ -53,10 +51,37 @@ public class TankstormGameManager : NetworkBehaviour
             case State.WaitingToStart:
                 break;
             case State.GamePlaying:
-                countdownToStartTimer.Value -= Time.deltaTime;
-                if (countdownToStartTimer.Value < 0f)
+                if (justStartedRound)
                 {
-                    //OnGameStarting?.Invoke(this, EventArgs.Empty);
+                    if (SceneManager.GetActiveScene().name == "GameScene")
+                    {
+                        if (ChoosingSkillsUI.Instance != null)
+                            ChoosingSkillsUI.Instance.ResetMenuClientRpc();
+                        else
+                            Debug.Log("cant find instance");
+                    }
+                    ChoosingSkillsUI.Instance.ResetReadyDictionnaryServerRpc();
+                    EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
+                    EnemySpawner.Instance.shouldSpawn = true;
+                    justAddedRound = false;
+                    gamePlayingTimer.Value = gamePlayingTimerMax;
+                    justStartedRound = false;
+                }
+                gamePlayingTimer.Value -= Time.deltaTime;
+                if (gamePlayingTimer.Value <= 0f)
+                {
+                    state.Value = State.ChoosingSkills;
+                }
+                break;
+            case State.ChoosingSkills:
+                justStartedRound = true;
+                if (!justAddedRound)
+                {
+                    EnemySpawner.Instance.KillAllEnemiesServerRpc();
+                    ChoosingSkillsUI.Instance.ShowChoosingSkillsClientRpc();
+                    EnemySpawner.Instance.shouldSpawn = false;
+                    EnemySpawner.Instance.currentRound += 1;
+                    justAddedRound = true;
                 }
                 break;
         }
@@ -110,5 +135,10 @@ public class TankstormGameManager : NetworkBehaviour
     public bool IsGamePlaying()
     {
         return state.Value == State.GamePlaying;
+    }
+
+    public float GetGamePlayingTimerNormalized()
+    {
+        return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
     }
 }

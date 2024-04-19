@@ -5,54 +5,80 @@ using UnityEngine;
 
 public class EnemySpawner : NetworkBehaviour
 {
+    public static EnemySpawner Instance;
     [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private GameObject bossPrefab;
     [SerializeField] private GameObject spawnParticlesPrefab;
-    [SerializeField] private float _timeBetweenSpawnRank = 4f;
+    [SerializeField] public float _timeBetweenSpawnRank = 2f;
     [SerializeField] private float _spawnAreaWidth = 8f;
     [SerializeField] private float _spawnAreaLength = 8f;
 
     [SerializeField] public EnemyListSO _enemyListSO;
+    public bool shouldSpawn = true;
     private int index = 0;
 
     public int currentRound = 1;
     private float particlesTimer = 0f;
     private float enemyTimer = 0f;
-    private float _timeBetweenSpawn = 4f;
+    [HideInInspector] public float _timeBetweenSpawn;
     private float _despawnTimer = 0f;
 
     private Vector3 spawnPosition;
     private NetworkObject particlesNO;
+    private bool shouldSpawnBoss;
 
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         _timeBetweenSpawn = _timeBetweenSpawnRank * (1.5f / currentRound);
         _enemyListSO.Clear();
+        shouldSpawnBoss = false;
     }
 
     private void Update()
     {
-        particlesTimer += Time.deltaTime;
-        enemyTimer += Time.deltaTime;
-        _despawnTimer += Time.deltaTime;
-
-        if (particlesTimer >= _timeBetweenSpawn)
+        if (shouldSpawn)
         {
-            spawnPosition = GetRandomSpawnPosition();
-            SpawnParticlesServerRpc();
-            particlesTimer = 0f;
-            _despawnTimer = 0f;
+            particlesTimer += Time.deltaTime;
+            enemyTimer += Time.deltaTime;
+            _despawnTimer += Time.deltaTime;
 
+            if (particlesTimer >= _timeBetweenSpawn)
+            {
+                spawnPosition = GetRandomSpawnPosition();
+                SpawnParticlesServerRpc();
+                particlesTimer = 0f;
+                _despawnTimer = 0f;
+
+            }
+            if (enemyTimer >= _timeBetweenSpawn + 0.2f)
+            {
+                SpawnEnemyDelayServerRpc();
+                particlesTimer = 0f;
+                enemyTimer = 0f;
+                _despawnTimer = 0f;
+            }
+            if (particlesNO != null && _despawnTimer >= 1f)
+                particlesNO.Despawn(true);
         }
-        if (enemyTimer >= _timeBetweenSpawn + 0.2f)
-        {
-            SpawnEnemyDelayServerRpc();
-            particlesTimer = 0f;
-            enemyTimer = 0f;
-            _despawnTimer = 0f;
-        }
-        if (particlesNO != null && _despawnTimer >= 1f)
-            particlesNO.Despawn(true);
+        if (shouldSpawn && currentRound == 5 && !shouldSpawnBoss)
+            SpawnBoss();
     }
+
+    private void SpawnBoss()
+    {
+        SpawnParticlesServerRpc();
+        spawnPosition = GetRandomSpawnPosition();
+        GameObject boss = Instantiate(bossPrefab, spawnPosition, Quaternion.identity);
+        NetworkObject bossNO = boss.GetComponent<NetworkObject>();
+        bossNO.Spawn();
+        shouldSpawnBoss = true;
+    }
+
 
     private Vector3 GetRandomSpawnPosition()
     {
@@ -84,5 +110,15 @@ public class EnemySpawner : NetworkBehaviour
         _enemyListSO.AddEnemy(enemy);
         enemy.GetComponent<Enemy>().index = index;
         index++;
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void KillAllEnemiesServerRpc()
+    {
+        foreach (var enemy in _enemyListSO)
+        {
+            enemy.gameObject.GetComponent<NetworkObject>().Despawn();
+        }
+        _enemyListSO.Clear();
     }
 }

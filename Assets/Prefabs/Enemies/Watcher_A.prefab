@@ -122,10 +122,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4838879
-  m_Height: 1.4411457
+  m_Radius: 0.5686295
+  m_Height: 2.09362
   m_Direction: 1
-  m_Center: {x: 0, y: 0.56003535, z: 0.27390647}
+  m_Center: {x: 0, y: 0.82930887, z: 0.27390647}
 --- !u!114 &8683262844845882912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1143816788
+  GlobalObjectIdHash: 2733243388
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -163,10 +163,15 @@ MonoBehaviour:
   _speed: 5
   _rangeToAttack: 4
   _rangeToStopMoving: 3
+  _coinPrefab: {fileID: 3192686776308477352, guid: 673f74d94c2701b42aba0d7c71887f87,
+    type: 3}
+  _coinsAmountDropped: 5
+  _coinSpawnRadius: 1.5
   index: 0
   isDead: 0
   _maxHealth: 10
-  _currentHealth: 10
+  _currentHealth:
+    m_InternalValue: 0
   distance: 0
 --- !u!95 &8438833590033276769
 Animator:
@@ -205,27 +210,27 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1640423525
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1523721793
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1919845803
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.13070178
     TriggerNameHash: 1080829965
     TransitionIndex: 0
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: -1087200342
+    OriginatingState: -1197562212
     DestinationState: 1523721793
     TransitionDuration: 0.25
     TriggerNameHash: 1654612129
@@ -313,7 +318,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: bf6e1ecaee2ae5a46b759c1ee8c5865e, type: 2}
+      objectReference: {fileID: 9100000, guid: f3e5c3f701f18444bb249f0de36b1aa1, type: 2}
     - target: {fileID: 5232933143240387364, guid: 4ffe6790bc7338241b2e69419620967d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

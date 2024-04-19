@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public class Watcher_A : Enemy
 {
@@ -9,8 +10,14 @@ public class Watcher_A : Enemy
     public int Health { get; private set; }
     void Start()
     {
-        Init();
-        Health = base._health;
+        if (IsServer)
+            Init();
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        _currentHealth.Value = 10 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
     }
 
     public override void Movement()

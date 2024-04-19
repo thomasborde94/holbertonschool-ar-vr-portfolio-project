@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[CreateAssetMenu]
-public class EnemyListSO : ScriptableObject
+public class EnemyListSO : ScriptableObject, IEnumerable<GameObject>
 {
     public List<GameObject> enemyList = new List<GameObject>();
 
@@ -38,6 +38,16 @@ public class EnemyListSO : ScriptableObject
             Debug.LogError("Index out of range in EnemyListSO");
             return null;
         }
+    }
+
+    public IEnumerator<GameObject> GetEnumerator()
+    {
+        return enemyList.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 
 }

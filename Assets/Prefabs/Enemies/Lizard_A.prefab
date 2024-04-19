@@ -56,7 +56,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6194085
+  m_Radius: 0.86909384
   m_Height: 2.4754996
   m_Direction: 1
   m_Center: {x: 0, y: 1.2534096, z: 0}
@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 982126218
+  GlobalObjectIdHash: 1379126562
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -93,14 +93,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 2737044408745300386}
-  _health: 10
+  _health: 15
   _speed: 4
   _rangeToAttack: 3
   _rangeToStopMoving: 2
+  _coinPrefab: {fileID: 3192686776308477352, guid: 673f74d94c2701b42aba0d7c71887f87,
+    type: 3}
+  _coinsAmountDropped: 5
+  _coinSpawnRadius: 1.5
   index: 0
   isDead: 0
-  _maxHealth: 10
-  _currentHealth: 10
+  _maxHealth: 15
+  _currentHealth:
+    m_InternalValue: 0
   distance: 0
 --- !u!95 &4462090505523041132
 Animator:
@@ -139,27 +144,27 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1640423525
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1523721793
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1919845803
-    DestinationState: -1087200342
+    DestinationState: -1197562212
     TransitionDuration: 0.13070178
     TriggerNameHash: 1080829965
     TransitionIndex: 0
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: -1087200342
+    OriginatingState: -1197562212
     DestinationState: 1523721793
     TransitionDuration: 0.25
     TriggerNameHash: 1654612129
@@ -228,6 +233,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyVisual
       objectReference: {fileID: 0}
+    - target: {fileID: 8268811963590475468, guid: 7dc7b54399d54194e9f2619f1832e8d5,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f3e5c3f701f18444bb249f0de36b1aa1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

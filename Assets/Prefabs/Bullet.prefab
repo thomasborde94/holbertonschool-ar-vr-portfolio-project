@@ -198,7 +198,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a09234fe8073b4b99bcd4f7e442119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletDamageToEnemies: 4
+  _bulletDamageToEnemies: {fileID: 11400000, guid: 6035cc5f42afda24cad35f663a5bfa82,
+    type: 2}
   _bulletDamageToPlayer: 1
   isMissile: 0
   _aoeMissile: {fileID: 0}

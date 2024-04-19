@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 public class AOEMissile : NetworkBehaviour
 {
-    [SerializeField] private int _missileDamageToEnemies = 4;
+    [SerializeField] private IntVariable _missileDamageToEnemies;
     private SphereCollider _sphereCollider;
 
     private void Awake()
@@ -25,8 +25,9 @@ public class AOEMissile : NetworkBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.SetCurrentHealthLoss(_missileDamageToEnemies);
-                enemy.GotHit();
+                //enemy.SetCurrentHealthLossClientRpc(_missileDamageToEnemies);
+                enemy.SetCurrentHealthLossServerRpc(_missileDamageToEnemies.value);
+                enemy.GotHitServerRpc();
             }
         }
     }
