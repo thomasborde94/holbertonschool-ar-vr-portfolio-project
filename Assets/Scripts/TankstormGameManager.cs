@@ -15,7 +15,7 @@ public class TankstormGameManager : NetworkBehaviour
     public NetworkVariable<State> state = new NetworkVariable<State>(State.BeforePlaying);
     public bool isLocalPlayerReady;
     private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private float gamePlayingTimerMax = 10f;
+    private float gamePlayingTimerMax = 30f;
     private bool justStartedRound = true;
     private bool justAddedRound = false;
 

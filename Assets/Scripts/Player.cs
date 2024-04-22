@@ -53,10 +53,10 @@ public class Player : NetworkBehaviour
 
 
     private float _nextShotTime = 0f;
-    private float _nextAOEMissileTime = 2f;
-    private float _nextRainTime = 2f;
-    private float _nextShockwaveTime = 2f;
-    private float _nextMineTime = 2f;
+    [HideInInspector] public float _nextAOEMissileTime = 2f;
+    [HideInInspector] public float _nextRainTime = 2f;
+    [HideInInspector] public float _nextShockwaveTime = 2f;
+    [HideInInspector] public float _nextMineTime = 2f;
     private float _delayBeforeBulletDespawn = 2.5f;
     private PlayerData playerData;
 
