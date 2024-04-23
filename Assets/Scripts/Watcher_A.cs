@@ -17,7 +17,8 @@ public class Watcher_A : Enemy
     public override void Init()
     {
         base.Init();
-        _currentHealth.Value = 10 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
+        if (IsServer)
+            _currentHealth.Value = 10 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
     }
 
     public override void Movement()

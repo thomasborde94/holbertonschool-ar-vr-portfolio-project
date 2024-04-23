@@ -341,7 +341,6 @@ public class Player : NetworkBehaviour
     {
         if (_nextRainTime >= _rainCooldown.value)
         {
-            Debug.Log(mousePosition);
             FireRain(mousePosition);
             ResetNextRainTimeClientRpc();
             
@@ -356,15 +355,12 @@ public class Player : NetworkBehaviour
 
     private void FireRain(Vector3 mousePosition)
     {
-        Debug.Log("called firerain");
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, targetLayer))
         {
-            Debug.Log(hit.collider);
             if (hit.collider != null)
             {
-                Debug.Log("managed to instantiate");
                 GameObject rain = Instantiate(_rainPrefab, hit.point, Quaternion.identity);
                 NetworkObject rainNO = rain.GetComponent<NetworkObject>();
                 rainNO.Spawn(true);

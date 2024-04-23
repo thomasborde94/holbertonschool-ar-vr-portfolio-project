@@ -41,6 +41,37 @@ public class EnemySpawner : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsServer)
+            return;
+
+
+        if (shouldSpawn)
+        {
+            particlesTimer += Time.deltaTime;
+            enemyTimer += Time.deltaTime;
+            _despawnTimer += Time.deltaTime;
+
+            if (particlesTimer >= _timeBetweenSpawn)
+            {
+                spawnPosition = GetRandomSpawnPosition();
+                SpawnParticlesServerRpc(spawnPosition);
+                particlesTimer = 0f;
+                _despawnTimer = 0f;
+            }
+
+            if (enemyTimer >= _timeBetweenSpawn + 0.2f)
+            {
+                SpawnEnemyDelayServerRpc(spawnPosition);
+                particlesTimer = 0f;
+                enemyTimer = 0f;
+                _despawnTimer = 0f;
+            }
+            if (particlesNO != null && _despawnTimer >= 1f)
+                particlesNO.Despawn(true);
+        }
+        if (shouldSpawn && currentRound == 5 && !shouldSpawnBoss)
+            SpawnBoss();
+        /*
         if (shouldSpawn)
         {
             particlesTimer += Time.deltaTime;
@@ -67,11 +98,12 @@ public class EnemySpawner : NetworkBehaviour
         }
         if (shouldSpawn && currentRound == 5 && !shouldSpawnBoss)
             SpawnBoss();
+        */
     }
 
     private void SpawnBoss()
     {
-        SpawnParticlesServerRpc();
+        SpawnParticlesServerRpc(spawnPosition);
         spawnPosition = GetRandomSpawnPosition();
         GameObject boss = Instantiate(bossPrefab, spawnPosition, Quaternion.identity);
         NetworkObject bossNO = boss.GetComponent<NetworkObject>();
@@ -90,6 +122,7 @@ public class EnemySpawner : NetworkBehaviour
         return spawnPosition;
     }
 
+    /*
     [ServerRpc(RequireOwnership =true)]
     private void SpawnParticlesServerRpc()
     {
@@ -98,7 +131,26 @@ public class EnemySpawner : NetworkBehaviour
         particlesNO = particles.GetComponent<NetworkObject>();
         particlesNO.Spawn(true);
     }
+    */
 
+    [ServerRpc(RequireOwnership = true)]
+    private void SpawnParticlesServerRpc(Vector3 spawnPosition)
+    {
+        // spawns particles of the enemy
+        GameObject particles = Instantiate(spawnParticlesPrefab, spawnPosition, Quaternion.identity);
+        particlesNO = particles.GetComponent<NetworkObject>();
+        particlesNO.Spawn(true);
+    }
+    /*
+    [ClientRpc]
+    private void SpawnParticlesClientRpc(Vector3 spawnPosition)
+    {
+        GameObject particles = Instantiate(spawnParticlesPrefab, spawnPosition, Quaternion.identity);
+        particlesNO = particles.GetComponent<NetworkObject>();
+        particlesNO.Spawn(true);
+    }
+    */
+    /*
     [ServerRpc(RequireOwnership = true)]
     private void SpawnEnemyDelayServerRpc()
     {
@@ -111,13 +163,53 @@ public class EnemySpawner : NetworkBehaviour
         enemy.GetComponent<Enemy>().index = index;
         index++;
     }
+    */
 
+    [ServerRpc(RequireOwnership = true)]
+    private void SpawnEnemyDelayServerRpc(Vector3 spawnPosition)
+    {
+        // Spawns the enemy
+
+        int enemyIndex = Random.Range(0, Mathf.Min(enemyPrefabs.Count, currentRound));
+        GameObject enemy = Instantiate(enemyPrefabs[enemyIndex], spawnPosition, Quaternion.identity);
+        NetworkObject enemyNO = enemy.GetComponent<NetworkObject>();
+        enemyNO.Spawn(true);
+        _enemyListSO.AddEnemy(enemy);
+        enemy.GetComponent<Enemy>().index = index;
+        index++;
+    }
+    /*
+    [ClientRpc]
+    private void SpawnEnemyDelayClientRpc(Vector3 spawnPosition, int enemyIndex)
+    {
+        GameObject enemy = Instantiate(enemyPrefabs[enemyIndex], spawnPosition, Quaternion.identity);
+        NetworkObject enemyNO = enemy.GetComponent<NetworkObject>();
+        enemyNO.Spawn(true);
+        _enemyListSO.AddEnemy(enemy);
+        enemy.GetComponent<Enemy>().index = index;
+        index++;
+    }
+    */
+    /*
     [ServerRpc(RequireOwnership =false)]
     public void KillAllEnemiesServerRpc()
     {
         foreach (var enemy in _enemyListSO)
         {
             enemy.gameObject.GetComponent<NetworkObject>().Despawn();
+        }
+        _enemyListSO.Clear();
+    }*/
+    [ServerRpc]
+    public void KillAllEnemiesServerRpc()
+    {
+        for (int i = _enemyListSO.Count() - 1; i >= 0; i--)
+        {
+            var enemy = _enemyListSO.GetEnemy(i);
+            if (enemy != null && enemy.gameObject != null && enemy.gameObject.activeSelf)
+            {
+                enemy.gameObject.GetComponent<NetworkObject>().Despawn();
+            }
         }
         _enemyListSO.Clear();
     }

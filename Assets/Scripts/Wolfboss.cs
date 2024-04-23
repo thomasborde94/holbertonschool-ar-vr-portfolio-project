@@ -20,7 +20,8 @@ public class Wolfboss :Enemy
     public override void Init()
     {
         base.Init();
-        _currentHealth.Value = 1000;
+        if (IsServer)
+            _currentHealth.Value = 1000;
     }
 
     public override void Update()

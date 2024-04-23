@@ -10,15 +10,23 @@ public class Mine : NetworkBehaviour
 
     private NetworkObject networkObject;
     private float _destructionDelay = 1f;
+    private bool taggedEnemy;
 
     private void Awake()
     {
         networkObject = GetComponent<NetworkObject>();
     }
 
+    private void Start()
+    {
+        taggedEnemy = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (!IsServer)
+            return;
+        if (other.CompareTag("Enemy") && !taggedEnemy)
         {
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
@@ -30,9 +38,25 @@ public class Mine : NetworkBehaviour
             
             GameObject particles = Instantiate(_explosionParticles, transform.position, Quaternion.identity);
             NetworkObject particlesNO = particles.GetComponent<NetworkObject>();
+            Debug.Log("should have instantiated mine particles");
             particlesNO.Spawn(true);
             DespawnWithDelay(_destructionDelay);
-            particlesNO.Despawn(true);
+            DespawnParticlesWithDelay(particlesNO, _destructionDelay);
+            taggedEnemy = true;
+        }
+    }
+
+    private void DespawnParticlesWithDelay(NetworkObject particles, float delay)
+    {
+        StartCoroutine(DespawnParticlesCoroutine(particles, delay));
+    }
+    private IEnumerator DespawnParticlesCoroutine(NetworkObject particles, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (particles.IsSpawned)
+        {
+            particles.Despawn(true);
         }
     }
 
@@ -46,7 +70,7 @@ public class Mine : NetworkBehaviour
 
         if (networkObject.IsSpawned)
         {
-            networkObject.Despawn();
+            networkObject.Despawn(true);
         }
     }
 

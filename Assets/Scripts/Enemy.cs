@@ -36,6 +36,7 @@ public abstract class Enemy : NetworkBehaviour
 
     private void Start()
     {
+        if (!IsServer) return;
         Init();
     }
 
@@ -51,7 +52,8 @@ public abstract class Enemy : NetworkBehaviour
     {
         _transform = GetComponent<Transform>();
         _player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        _currentHealth.Value = 10 * EnemySpawner.Instance.currentRound * 2;
+        if (IsServer)
+            _currentHealth.Value = 10 * EnemySpawner.Instance.currentRound * 2;
     }
 
     public virtual void Update()
@@ -160,7 +162,7 @@ public abstract class Enemy : NetworkBehaviour
         _currentHealth.Value -= healthAmountLost;
     }
     */
-    [ServerRpc(RequireOwnership =true)]
+    [ServerRpc(RequireOwnership =false)]
     public void SetCurrentHealthLossServerRpc(int healthAmountLost, ServerRpcParams serverRpcParams = default)
     {
         Debug.Log("SetCurrentHealthLossServerRpc is called");
@@ -205,9 +207,11 @@ public abstract class Enemy : NetworkBehaviour
 
             foreach (GameObject coin in droppedCoins)
             {
-                Vector3 currentPosition = coin.transform.position;
-
-                coin.transform.position = Vector3.Lerp(currentPosition, _player.position, elapsedTime / lerpTime);
+                if (coin != null)
+                {
+                    Vector3 currentPosition = coin.transform.position;
+                    coin.transform.position = Vector3.Lerp(currentPosition, _player.position, elapsedTime / lerpTime);
+                }
             }
 
             yield return null;

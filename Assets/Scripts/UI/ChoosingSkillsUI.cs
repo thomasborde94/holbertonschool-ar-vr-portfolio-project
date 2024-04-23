@@ -80,19 +80,22 @@ public class ChoosingSkillsUI : NetworkBehaviour
 
     private void Update()
     {
-        if (!assignedRole)
+        if (Player.Instance != null)
         {
-            if (Player.Instance.PlayerRoleString() == "Driver")
+            if (!assignedRole)
             {
-                AssignRandomDriverUpgradeToRandomSlot();
-                Debug.Log("i am driver");
+                if (Player.Instance.PlayerRoleString() == "Driver")
+                {
+                    AssignRandomDriverUpgradeToRandomSlot();
+                    Debug.Log("i am driver");
+                }
+                else if (Player.Instance.PlayerRoleString() == "Shooter")
+                {
+                    AssignRandomShooterUpgradeToRandomSlot();
+                    Debug.Log("i am shooter");
+                }
+                assignedRole = true;
             }
-            else if (Player.Instance.PlayerRoleString() == "Shooter")
-            {
-                AssignRandomShooterUpgradeToRandomSlot();
-                Debug.Log("i am shooter");
-            }
-            assignedRole = true;
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : NetworkBehaviour
 {
     [SerializeField] private GameObject _coinGameObject;
 
@@ -27,8 +27,12 @@ public class Coin : MonoBehaviour
 
     private void Update()
     {
-        if (TankstormGameManager.Instance.state.Value == TankstormGameManager.State.ChoosingSkills)
-            DespawnWithDelay(2f);
+        if (IsServer)
+        {
+            if (TankstormGameManager.Instance.state.Value == TankstormGameManager.State.ChoosingSkills)
+                DespawnWithDelay(2f);
+        }
+        
     }
 
     public void DespawnWithDelay(float delay)
