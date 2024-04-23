@@ -158,13 +158,13 @@ public class TankstormLobby : MonoBehaviour
             Allocation allocation = await AllocateRelay();
 
             // REMOVE IF USELESS
-            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
                 allocation.RelayServer.IpV4,
                 (ushort)allocation.RelayServer.Port,
                 allocation.AllocationIdBytes,
                 allocation.Key,
                 allocation.ConnectionData
-                );*/
+                );
             // Get the relay joinCode
             string relayJoinCode = await GetRelayJoinCode(allocation);
 
@@ -175,7 +175,7 @@ public class TankstormLobby : MonoBehaviour
                 }
             });
             // Setup the unityTransport to use the relay
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
+            //NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "dtls"));
 
             // Starts hosts and join character select scene
             TankstormGameMultiplayer.Instance.StartHost();
@@ -202,15 +202,15 @@ public class TankstormLobby : MonoBehaviour
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
 
             // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
-            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
                 joinAllocation.RelayServer.IpV4,
                 (ushort)joinAllocation.RelayServer.Port,
                 joinAllocation.AllocationIdBytes,
                 joinAllocation.Key,
                 joinAllocation.ConnectionData,
                 joinAllocation.HostConnectionData
-                );*/
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
+                );
+            //NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
         }
@@ -234,15 +234,15 @@ public class TankstormLobby : MonoBehaviour
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
             // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
-            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
                 joinAllocation.RelayServer.IpV4,
                 (ushort)joinAllocation.RelayServer.Port,
                 joinAllocation.AllocationIdBytes,
                 joinAllocation.Key,
                 joinAllocation.ConnectionData,
                 joinAllocation.HostConnectionData
-                );*/
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
+                );
+            //NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
         }
@@ -263,15 +263,15 @@ public class TankstormLobby : MonoBehaviour
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
             // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
-            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
                 joinAllocation.RelayServer.IpV4,
                 (ushort)joinAllocation.RelayServer.Port,
                 joinAllocation.AllocationIdBytes,
                 joinAllocation.Key,
                 joinAllocation.ConnectionData,
                 joinAllocation.HostConnectionData
-                );*/
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
+                );
+            //NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
         }
