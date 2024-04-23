@@ -106,6 +106,7 @@ public class TankstormLobby : MonoBehaviour
         try
         {
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(TankstormGameMultiplayer.MAX_PLAYER_AMOUNT - 1);
+            
             return allocation;
         }
         catch (RelayServiceException e)
@@ -134,6 +135,7 @@ public class TankstormLobby : MonoBehaviour
         try
         {
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
             return joinAllocation;
         }
         catch (RelayServiceException e)
@@ -154,6 +156,15 @@ public class TankstormLobby : MonoBehaviour
 
             // Allocates the relay
             Allocation allocation = await AllocateRelay();
+
+            // REMOVE IF USELESS
+            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData(
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData
+                );*/
             // Get the relay joinCode
             string relayJoinCode = await GetRelayJoinCode(allocation);
 
@@ -189,6 +200,16 @@ public class TankstormLobby : MonoBehaviour
             string relayJoinCode = joinedLobby.Data[KEY_RELAY_JOIN_CODE].Value;
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+
+            // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
+            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+                joinAllocation.RelayServer.IpV4,
+                (ushort)joinAllocation.RelayServer.Port,
+                joinAllocation.AllocationIdBytes,
+                joinAllocation.Key,
+                joinAllocation.ConnectionData,
+                joinAllocation.HostConnectionData
+                );*/
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
@@ -212,6 +233,15 @@ public class TankstormLobby : MonoBehaviour
             string relayJoinCode = joinedLobby.Data[KEY_RELAY_JOIN_CODE].Value;
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+            // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
+            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+                joinAllocation.RelayServer.IpV4,
+                (ushort)joinAllocation.RelayServer.Port,
+                joinAllocation.AllocationIdBytes,
+                joinAllocation.Key,
+                joinAllocation.ConnectionData,
+                joinAllocation.HostConnectionData
+                );*/
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
@@ -232,6 +262,15 @@ public class TankstormLobby : MonoBehaviour
             string relayJoinCode = joinedLobby.Data[KEY_RELAY_JOIN_CODE].Value;
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+            // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
+            /*NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
+                joinAllocation.RelayServer.IpV4,
+                (ushort)joinAllocation.RelayServer.Port,
+                joinAllocation.AllocationIdBytes,
+                joinAllocation.Key,
+                joinAllocation.ConnectionData,
+                joinAllocation.HostConnectionData
+                );*/
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, "dtls"));
 
             TankstormGameMultiplayer.Instance.StartClient();
