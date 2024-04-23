@@ -97,8 +97,6 @@ public class Player : NetworkBehaviour
             HandleAOEMissileServerAuth(inputHandler.Skill1Input);
             HandleRainServerAuth(inputHandler.Skill2Input);
         }
-        else
-            Debug.Log("In Choosing skills ui");
     }
 
 
@@ -203,6 +201,13 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void IncreaseNextAOEMissileTimeServerRpc()
     {
+        IncreaseNextAOEMissileTimeClientRpc();
+        
+    }
+
+    [ClientRpc]
+    private void IncreaseNextAOEMissileTimeClientRpc()
+    {
         _nextAOEMissileTime += Time.deltaTime;
     }
     [ServerRpc(RequireOwnership = false)]
@@ -252,8 +257,13 @@ public class Player : NetworkBehaviour
         if (_nextShockwaveTime >= _shockwaveCooldown.value)
         {
             CallBlastClientRpc();
-            _nextShockwaveTime = 0f;
+            ResetNextShockwaveTimeClientRpc();
         }
+    }
+    [ClientRpc]
+    private void ResetNextShockwaveTimeClientRpc()
+    {
+        _nextShockwaveTime = 0f;
     }
 
     [ClientRpc]
@@ -264,6 +274,11 @@ public class Player : NetworkBehaviour
     }
     [ServerRpc(RequireOwnership =false)]
     private void IncreaseNextShockwaveTimeServerRpc()
+    {
+        IncreaseNextShockwaveTimeClientRpc();
+    }
+    [ClientRpc]
+    private void IncreaseNextShockwaveTimeClientRpc()
     {
         _nextShockwaveTime += Time.deltaTime;
     }
@@ -285,11 +300,23 @@ public class Player : NetworkBehaviour
             GameObject mine = Instantiate(_minePrefab, transform.position, Quaternion.identity);
             NetworkObject mineNo = mine.GetComponent<NetworkObject>();
             mineNo.Spawn(true);
-            _nextMineTime = 0f;
+            ResetNextMineTimeClientRpc();
+            
         }
     }
     [ServerRpc(RequireOwnership =false)]
     private void IncreaseNextMineTimeServerRpc()
+    {
+        IncreaseNextMineTimeClientRpc();
+        
+    }
+    [ClientRpc]
+    private void ResetNextMineTimeClientRpc()
+    {
+        _nextMineTime = 0f;
+    }
+    [ClientRpc]
+    private void IncreaseNextMineTimeClientRpc()
     {
         if (_nextMineTime >= 10f)
             _nextMineTime = 10f;
@@ -316,8 +343,14 @@ public class Player : NetworkBehaviour
         {
             Debug.Log(mousePosition);
             FireRain(mousePosition);
-            _nextRainTime = 0;
+            ResetNextRainTimeClientRpc();
+            
         }
+    }
+    [ClientRpc]
+    private void ResetNextRainTimeClientRpc()
+    {
+        _nextRainTime = 0;
     }
 
 
@@ -344,6 +377,13 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void IncreaseNextRainTimeServerRpc()
     {
+        IncreaseNextRainTimeClientRpc();
+        
+    }
+
+    [ClientRpc]
+    private void IncreaseNextRainTimeClientRpc()
+    {
         _nextRainTime += Time.deltaTime;
     }
 
@@ -353,8 +393,15 @@ public class Player : NetworkBehaviour
         if (_nextAOEMissileTime >= _aoeMissileCooldown.value)
         {
             FireAOEMissile();
-            _nextAOEMissileTime = 0f;
+            ResetNextAOEMissileTimeClientRpc();
+            
         }
+    }
+
+    [ClientRpc]
+    private void ResetNextAOEMissileTimeClientRpc()
+    {
+        _nextAOEMissileTime = 0f;
     }
 
     private void FireAOEMissile()
@@ -387,7 +434,7 @@ public class Player : NetworkBehaviour
         if (roleId == 1)
             return "Shooter";
         else
-            return "ERROR";
+            return null;
     }
 
     public void DespawnWithDelay(NetworkObject networkObject, float delay)

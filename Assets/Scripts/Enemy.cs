@@ -56,8 +56,6 @@ public abstract class Enemy : NetworkBehaviour
 
     public virtual void Update()
     {
-
-
         if (!isDead)
         {
             Movement();
