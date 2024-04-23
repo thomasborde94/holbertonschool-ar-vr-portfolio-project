@@ -1284,7 +1284,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 1.25
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 5
+  _upgradeCost: 15
   _costText: {fileID: 1930136856}
   _image: {fileID: 0}
   isAvailable: 0
@@ -1631,7 +1631,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.61134636, y: 0.000000019256637, z: -0.000000014876198, w: 0.7913632}
+  m_LocalRotation: {x: 0.61134636, y: -0.000000019256632, z: 0.000000014876195, w: 0.7913632}
   m_LocalPosition: {x: 0, y: 26.44, z: -6.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3169,7 +3169,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 8
+  _upgradeCost: 15
   _costText: {fileID: 420883831}
   _image: {fileID: 0}
   isAvailable: 0
@@ -4140,7 +4140,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0.8
-  _upgradeCost: 8
+  _upgradeCost: 20
   _costText: {fileID: 1527326630}
   _image: {fileID: 0}
   isAvailable: 0
@@ -4390,7 +4390,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 7
+  _upgradeCost: 30
   _costText: {fileID: 1385854598}
   _image: {fileID: 0}
   isAvailable: 0
@@ -4796,7 +4796,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 9
+  _upgradeCost: 35
   _costText: {fileID: 1672953190}
   _image: {fileID: 0}
   isAvailable: 0
@@ -4963,7 +4963,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 3
+  _upgradeCost: 15
   _costText: {fileID: 963618012}
   _image: {fileID: 0}
   isAvailable: 0
@@ -6629,7 +6629,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 6
+  _upgradeCost: 15
   _costText: {fileID: 1287563456}
   _image: {fileID: 0}
   isAvailable: 0
@@ -8195,7 +8195,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 1
+  _upgradeCost: 30
   _costText: {fileID: 373913920}
   _image: {fileID: 0}
   isAvailable: 0
@@ -8338,7 +8338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1401684375}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.61134636, y: 0.000000019256637, z: -0.000000014876198, w: 0.7913632}
+  m_LocalRotation: {x: 0.61134636, y: -0.000000019256632, z: 0.000000014876195, w: 0.7913632}
   m_LocalPosition: {x: 0, y: 26.44, z: -6.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8620,7 +8620,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 2
+  _upgradeCost: 15
   _costText: {fileID: 725478721}
   _image: {fileID: 0}
   isAvailable: 0
@@ -10269,7 +10269,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 4
+  _upgradeCost: 30
   _costText: {fileID: 1507291340}
   _image: {fileID: 0}
   isAvailable: 0
@@ -12026,7 +12026,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0.8
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 7
+  _upgradeCost: 20
   _costText: {fileID: 1837895286}
   _image: {fileID: 0}
   isAvailable: 0
@@ -12328,7 +12328,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 10
+  _upgradeCost: 20
   _costText: {fileID: 1615096771}
   _image: {fileID: 0}
   isAvailable: 0
@@ -14859,7 +14859,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 5
+  _upgradeCost: 15
   _costText: {fileID: 1764829493}
   _image: {fileID: 0}
   isAvailable: 0
@@ -15672,7 +15672,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 1
+  _upgradeCost: 30
   _costText: {fileID: 1589908279}
   _image: {fileID: 6806793800723443653}
   isAvailable: 0
@@ -15760,7 +15760,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 2
+  _upgradeCost: 15
   _costText: {fileID: 560876268}
   _image: {fileID: 8391360381714061820}
   isAvailable: 0
@@ -15822,7 +15822,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 4
+  _upgradeCost: 30
   _costText: {fileID: 1456711985}
   _image: {fileID: 0}
   isAvailable: 0
@@ -15922,7 +15922,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 6
+  _upgradeCost: 20
   _costText: {fileID: 1735628421}
   _image: {fileID: 0}
   isAvailable: 0
@@ -16071,7 +16071,7 @@ MonoBehaviour:
   _multiplierMissileSmallUpgrade: 0
   _multiplierMissileCdUpgrade: 0
   _multiplierRainCdUpgrade: 0
-  _upgradeCost: 3
+  _upgradeCost: 20
   _costText: {fileID: 1909183315}
   _image: {fileID: 0}
   isAvailable: 0

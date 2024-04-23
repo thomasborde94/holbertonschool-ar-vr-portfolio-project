@@ -104,7 +104,6 @@ public class Player : NetworkBehaviour
     private void HandleMovementServerAuth()
     {
         Vector2 inputVector = inputHandler.MoveInput;
-        Debug.Log("input vector is " + inputVector);
         HandleMovementServerRpc(inputVector);
     }
 
