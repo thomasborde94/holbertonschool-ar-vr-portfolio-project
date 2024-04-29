@@ -13,8 +13,6 @@ public class Player : NetworkBehaviour
 {
     public static Player Instance {  get; private set; }
 
-    public float speed = 10f;
-    //public bool newGame;
 
     [Header("Player")]
     [SerializeField] private FloatVariable _moveSpeed;
@@ -59,14 +57,12 @@ public class Player : NetworkBehaviour
     [HideInInspector] public float _nextShockwaveTime = 2f;
     [HideInInspector] public float _nextMineTime = 2f;
     private float _delayBeforeBulletDespawn = 2.5f;
-    private PlayerData playerData;
     private bool startedPlayingTankSound = false;
 
     private void Awake()
     {
         Instance = this;
         coinAmount = 0;
-        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()
