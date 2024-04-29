@@ -14,7 +14,8 @@ public class DataManager : NetworkBehaviour
     [SerializeField] private FloatVariable _shockwaveCd;
     [SerializeField] private FloatVariable _shockwaveRadius;
     [SerializeField] private FloatVariable _shockwaveHitboxRadius;
-    [SerializeField] private FloatVariable _movementSpeed;
+    //[SerializeField] private FloatVariable _movementSpeed;
+
     [SerializeField] private FloatVariable _bulletCd;
     [SerializeField] private IntVariable _bulletDamage;
     [SerializeField] private IntVariable _missileDamage;
@@ -50,7 +51,7 @@ public class DataManager : NetworkBehaviour
         _shockwaveCd.value = 3;
         _shockwaveRadius.value = 5;
         _shockwaveHitboxRadius.value = 5;
-        _movementSpeed.value = 6;
+        Player.Instance._moveSpeed.Value = 6;
         _bulletCd.value = 1;
         _bulletDamage.value = 1;
         _missileDamage.value = 4;
@@ -157,7 +158,8 @@ public class DataManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void UpgradeMovementSpeedServerRpc(float _movementSpeedUpgrade)
     {
-        float initialValue = _movementSpeed.value;
+        //float initialValue = _movementSpeed.value;
+        float initialValue = Player.Instance._moveSpeed.Value;
         float newValue = initialValue * _movementSpeedUpgrade;
         UpgradeMovementSpeedClientRpc(newValue);
     }
@@ -165,8 +167,9 @@ public class DataManager : NetworkBehaviour
     [ClientRpc]
     private void UpgradeMovementSpeedClientRpc(float _movementSpeedUpgrade)
     {
-        _movementSpeed.value = _movementSpeedUpgrade;
-        Debug.Log("movementspeed is now " + _movementSpeed.value);
+        //_movementSpeed.value = _movementSpeedUpgrade;
+        Player.Instance._moveSpeed.Value = _movementSpeedUpgrade;
+        Debug.Log("movementspeed is now " + Player.Instance._moveSpeed.Value);
     }
 
     [ServerRpc(RequireOwnership = false)]

@@ -15,7 +15,8 @@ public class Player : NetworkBehaviour
 
 
     [Header("Player")]
-    [SerializeField] private FloatVariable _moveSpeed;
+    //[SerializeField] private FloatVariable _moveSpeed;
+    public NetworkVariable<float> _moveSpeed = new NetworkVariable<float>(10f);
     [SerializeField] private float _rotateSpeed = 10f;
     [SerializeField] private float _towerRotationSpeed = 10f;
     public float _maxHealth = 10;
@@ -120,7 +121,7 @@ public class Player : NetworkBehaviour
             SFXManager.Instance.StopSFX(10);
             startedPlayingTankSound = false;
         }
-        float moveDistance = _moveSpeed.value * Time.deltaTime;
+        float moveDistance = _moveSpeed.Value * Time.deltaTime;
         float playerRadius = 0.7f;
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirection,
             Quaternion.identity, moveDistance, collisionsLayerMask);
