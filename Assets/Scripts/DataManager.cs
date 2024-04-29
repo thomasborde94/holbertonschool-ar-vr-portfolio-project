@@ -24,6 +24,7 @@ public class DataManager : NetworkBehaviour
     [SerializeField] private FloatVariable _rainCd;
 
     private GameObject shockWaveGo;
+    private bool initialized;
 
     public override void OnNetworkSpawn()
     {
@@ -33,6 +34,7 @@ public class DataManager : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
+        initialized = false;
     }
     private void Start()
     {
@@ -51,7 +53,11 @@ public class DataManager : NetworkBehaviour
         _shockwaveCd.value = 3;
         _shockwaveRadius.value = 5;
         _shockwaveHitboxRadius.value = 5;
-        Player.Instance._moveSpeed.Value = 6;
+        if (Player.Instance != null)
+        {
+            Player.Instance._moveSpeed.Value = 6;
+            initialized = true;
+        }
         _bulletCd.value = 1;
         _bulletDamage.value = 1;
         _missileDamage.value = 4;
@@ -64,6 +70,9 @@ public class DataManager : NetworkBehaviour
     {
         if (shockWaveGo == null)
             shockWaveGo = GameObject.Find("Shockwave");
+
+        if (!initialized)
+            InitializeSkillsData();
     }
 
     [ServerRpc(RequireOwnership = false)]
