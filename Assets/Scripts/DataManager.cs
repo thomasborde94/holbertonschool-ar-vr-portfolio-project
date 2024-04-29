@@ -53,7 +53,7 @@ public class DataManager : NetworkBehaviour
         _shockwaveCd.value = 3;
         _shockwaveRadius.value = 5;
         _shockwaveHitboxRadius.value = 5;
-        if (Player.Instance != null)
+        if (Player.Instance != null && IsServer)
         {
             Player.Instance._moveSpeed.Value = 6;
             initialized = true;
