@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2087297587778259483}
+  - component: {fileID: 7123235759128195959}
   - component: {fileID: 4603169580522256813}
   m_Layer: 5
   m_Name: ChoosingSkillsUI
@@ -41,6 +42,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7123235759128195959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165182283530172151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 711688039
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &4603169580522256813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,18 +75,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   choosingSkillsUI: {fileID: 165182283530172151}
+  parentSKillsUI: {fileID: 0}
+  driverUpgradeParent: {fileID: 0}
+  shooterUpgradeParent: {fileID: 0}
   keepGoingButton: {fileID: 5333473210214440446}
+  rollButton: {fileID: 0}
+  readyText: {fileID: 0}
   _slots:
   - {fileID: 1473543298501078104}
   - {fileID: 5293203135812453470}
   - {fileID: 4064236195300090240}
-  _upgrades:
-  - {fileID: 6069619567573278040}
-  - {fileID: 6081809767541759924}
-  - {fileID: 6428376856319801625}
-  - {fileID: 4269169181828834585}
-  - {fileID: 7625394262882550740}
-  - {fileID: 5296079603357156050}
+  _driverUpgrades: []
+  _shooterUpgrades: []
+  _rollCost: 0
+  _rollCostText: {fileID: 0}
 --- !u!1 &1192635466868523614
 GameObject:
   m_ObjectHideFlags: 0
