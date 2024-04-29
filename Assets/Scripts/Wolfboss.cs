@@ -6,6 +6,7 @@ using UnityEngine;
 public class Wolfboss :Enemy
 {
     public int Health { get; private set; }
+
     void Start()
     {
         if (IsServer)
@@ -21,7 +22,7 @@ public class Wolfboss :Enemy
     {
         base.Init();
         if (IsServer)
-            _currentHealth.Value = 1000;
+            _currentHealth.Value = 5;
     }
 
     public override void Update()

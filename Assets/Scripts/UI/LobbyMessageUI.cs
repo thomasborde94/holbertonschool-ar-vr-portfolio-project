@@ -13,7 +13,7 @@ public class LobbyMessageUI : MonoBehaviour
 
     private void Awake()
     {
-        closeButton.onClick.AddListener(Hide);
+        closeButton.onClick.AddListener(HideAndPlaySFX);
     }
 
     private void Start()
@@ -77,6 +77,12 @@ public class LobbyMessageUI : MonoBehaviour
 
     private void Hide()
     {
+        gameObject.SetActive(false);
+    }
+
+    private void HideAndPlaySFX()
+    {
+        SFXManager.Instance.PlaySFX(0);
         gameObject.SetActive(false);
     }
 

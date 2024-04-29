@@ -19,10 +19,11 @@ public class CharacterSelectUI : MonoBehaviour
         {
             TankstormLobby.Instance.LeaveLobby();
             NetworkManager.Singleton.Shutdown();
-            Loader.Load(Loader.Scene.MainMenuScene);
+            StartCoroutine(SFXManager.Instance.PlaySoundAndLoadMainMenuScene());
         });
         readyButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             CharacterSelectReady.Instance.SetPlayerReady();
         });
     }

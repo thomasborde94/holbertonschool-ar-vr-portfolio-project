@@ -38,6 +38,7 @@ public class HealthBarUI : MonoBehaviour
         currentMat.SetFloat("_Health", Player.Instance.GetCurrentHealthPart());
         currentMat.SetColor("_Color", _color);
 
-        transform.LookAt(targetLookAt.transform.position, Vector3.up);
+        if (targetLookAt != null)
+            transform.LookAt(targetLookAt.transform.position, Vector3.up);
     }
 }

@@ -40,11 +40,14 @@ public class ChoosingSkillsUI : NetworkBehaviour
         playerReadyDictionary = new Dictionary<ulong, bool>();
         keepGoingButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             if (TankstormGameManager.Instance.state.Value == TankstormGameManager.State.ChoosingSkills)
             {
+                
                 rollForNextRound = true;
                 SetPlayerReady();
                 shouldIncreaseRollCost = false;
+
                 Roll();
                 rollForNextRound = false;
                 _rollCost = _initialRollCost;
@@ -53,6 +56,7 @@ public class ChoosingSkillsUI : NetworkBehaviour
         });
         rollButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             shouldIncreaseRollCost = true;
             Roll();
         });
@@ -87,12 +91,10 @@ public class ChoosingSkillsUI : NetworkBehaviour
                 if (Player.Instance.PlayerRoleString() == "Driver")
                 {
                     AssignRandomDriverUpgradeToRandomSlot();
-                    Debug.Log("i am driver");
                 }
                 else if (Player.Instance.PlayerRoleString() == "Shooter")
                 {
                     AssignRandomShooterUpgradeToRandomSlot();
-                    Debug.Log("i am shooter");
                 }
                 assignedRole = true;
             }
@@ -229,6 +231,10 @@ public class ChoosingSkillsUI : NetworkBehaviour
             Color currentColor = upgrade.GetComponent<Image>().color;
             currentColor.a = 1;
             upgrade.GetComponent<Image>().color = currentColor;
+
+            Color currentTextColor = upgrade._descriptionText.color;
+            currentTextColor.a = 1f;
+            upgrade._descriptionText.color = currentTextColor;
         } 
     }
     public void ResetShooterUpdatesAvailability()
@@ -241,6 +247,10 @@ public class ChoosingSkillsUI : NetworkBehaviour
             Color currentColor = upgrade.GetComponent<Image>().color;
             currentColor.a = 1;
             upgrade.GetComponent<Image>().color = currentColor;
+
+            Color currentTextColor = upgrade._descriptionText.color;
+            currentTextColor.a = 1f;
+            upgrade._descriptionText.color = currentTextColor;
         }
     }
     public void ResetDriverUpgradesToInitialParent()
@@ -287,6 +297,7 @@ public class ChoosingSkillsUI : NetworkBehaviour
 
         if (allClientsReady)
         {
+            Roll();
             HideChoosingSkillsClientRpc();
             Debug.Log("All clients are ready");
             TankstormGameManager.Instance.state.Value = TankstormGameManager.State.GamePlaying;

@@ -38,20 +38,25 @@ public class DataManager : NetworkBehaviour
         if (SceneManager.GetActiveScene().name == "GameScene" && EnemySpawner.Instance.currentRound == 1 &&
             TankstormGameManager.Instance.state.Value == TankstormGameManager.State.GamePlaying)
         {
-            _mineDamage.value = 9;
-            _mineCd.value = 3;
-            _shockwaveDamage.value = 4;
-            _shockwaveCd.value = 3;
-            _shockwaveRadius.value = 5;
-            _shockwaveHitboxRadius.value = 5;
-            _movementSpeed.value = 6;
-            _bulletCd.value = 1;
-            _bulletDamage.value = 1;
-            _missileDamage.value = 4;
-            _missileCd.value = 3;
-            _rainDamage.value = 1;
-            _rainCd.value = 3;
+            InitializeSkillsData();
         }
+    }
+
+    public void InitializeSkillsData()
+    {
+        _mineDamage.value = 9;
+        _mineCd.value = 3;
+        _shockwaveDamage.value = 4;
+        _shockwaveCd.value = 3;
+        _shockwaveRadius.value = 5;
+        _shockwaveHitboxRadius.value = 5;
+        _movementSpeed.value = 6;
+        _bulletCd.value = 1;
+        _bulletDamage.value = 1;
+        _missileDamage.value = 4;
+        _missileCd.value = 3;
+        _rainDamage.value = 1;
+        _rainCd.value = 3;
     }
 
     private void Update()

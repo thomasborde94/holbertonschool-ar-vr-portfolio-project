@@ -14,13 +14,14 @@ public class Player : NetworkBehaviour
     public static Player Instance {  get; private set; }
 
     public float speed = 10f;
+    //public bool newGame;
 
     [Header("Player")]
     [SerializeField] private FloatVariable _moveSpeed;
     [SerializeField] private float _rotateSpeed = 10f;
     [SerializeField] private float _towerRotationSpeed = 10f;
     public float _maxHealth = 10;
-    public float _currentHealth = 10;
+    public NetworkVariable<float> _currentHealth = new NetworkVariable<float>(10f);
 
     [Header("Bullet")]
     [SerializeField] private Bullet _bulletPrefab;
@@ -59,16 +60,18 @@ public class Player : NetworkBehaviour
     [HideInInspector] public float _nextMineTime = 2f;
     private float _delayBeforeBulletDespawn = 2.5f;
     private PlayerData playerData;
+    private bool startedPlayingTankSound = false;
 
     private void Awake()
     {
         Instance = this;
         coinAmount = 0;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
+        _currentHealth.Value = _maxHealth;
         inputHandler = PlayerInputHandler.Instance;
 
         _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
@@ -111,6 +114,16 @@ public class Player : NetworkBehaviour
     private void HandleMovementServerRpc(Vector2 inputVector)
     {
         Vector3 moveDirection = new Vector3(inputVector.x, 0f, inputVector.y);
+        if (inputVector != Vector2.zero && !startedPlayingTankSound)
+        {
+            SFXManager.Instance.PlaySFX(10);
+            startedPlayingTankSound = true;
+        }
+        else if (inputVector == Vector2.zero)
+        {
+            SFXManager.Instance.StopSFX(10);
+            startedPlayingTankSound = false;
+        }
         float moveDistance = _moveSpeed.value * Time.deltaTime;
         float playerRadius = 0.7f;
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirection,
@@ -215,6 +228,7 @@ public class Player : NetworkBehaviour
     {
         if (_nextShotTime >= _bulletCd.value)
         {
+            SFXManager.Instance.PlaySFX(7);
             Firebullet();
             _nextShotTime = 0f;
         }
@@ -256,6 +270,7 @@ public class Player : NetworkBehaviour
     {
         if (_nextShockwaveTime >= _shockwaveCooldown.value)
         {
+            SFXManager.Instance.PlaySFX(2);
             CallBlastClientRpc();
             ResetNextShockwaveTimeClientRpc();
         }
@@ -297,6 +312,7 @@ public class Player : NetworkBehaviour
     {
         if (_nextMineTime >= _mineCooldown.value)
         {
+            SFXManager.Instance.PlaySFX(4);
             GameObject mine = Instantiate(_minePrefab, transform.position, Quaternion.identity);
             NetworkObject mineNo = mine.GetComponent<NetworkObject>();
             mineNo.Spawn(true);
@@ -341,10 +357,19 @@ public class Player : NetworkBehaviour
     {
         if (_nextRainTime >= _rainCooldown.value)
         {
+            StartCoroutine(PlayRainSound());
+            
             FireRain(mousePosition);
             ResetNextRainTimeClientRpc();
             
         }
+    }
+
+    private IEnumerator PlayRainSound()
+    {
+        SFXManager.Instance.PlaySFX(5);
+        yield return new WaitForSeconds(3f);
+        SFXManager.Instance.StopSFX(5);
     }
     [ClientRpc]
     private void ResetNextRainTimeClientRpc()
@@ -388,6 +413,7 @@ public class Player : NetworkBehaviour
     {
         if (_nextAOEMissileTime >= _aoeMissileCooldown.value)
         {
+            SFXManager.Instance.PlaySFX(1);
             FireAOEMissile();
             ResetNextAOEMissileTimeClientRpc();
             
@@ -411,12 +437,16 @@ public class Player : NetworkBehaviour
 
     public float GetCurrentHealthPart()
     {
-        return (_currentHealth / _maxHealth);
+        return (_currentHealth.Value / _maxHealth);
     }
 
     public void SetCurrentHealthLoss(float healthAmountLost)
     {
-        _currentHealth -= healthAmountLost;
+        if (IsServer)
+        {
+            SFXManager.Instance.PlaySFX(6);
+            _currentHealth.Value -= healthAmountLost;
+        }
     }
 
     // Gets the role of the player
@@ -446,5 +476,23 @@ public class Player : NetworkBehaviour
             networkObject.Despawn();
         }
     }
+
+    /*
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("an enemy hit the player");
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("an enemy hit the player");
+        }
+    }
+    */
 
 }

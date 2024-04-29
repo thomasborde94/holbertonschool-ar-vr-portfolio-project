@@ -14,11 +14,16 @@ public class TankstormGameManager : NetworkBehaviour
 
     public NetworkVariable<State> state = new NetworkVariable<State>(State.BeforePlaying);
     public bool isLocalPlayerReady;
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
-    private float gamePlayingTimerMax = 60f;
-    private bool justStartedRound = true;
+    public NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(0f);
+    public float gamePlayingTimerMax = 15f;
+    public bool justStartedRound = true;
     private bool justAddedRound = false;
+    private GameObject _wolfBoss;
+    private bool finishedGame;
+    [HideInInspector] public bool playerLost;
+    [HideInInspector] public bool playerWon;
 
+    private bool playedPlayerWonSound = false;
 
     public enum State
     {
@@ -39,6 +44,14 @@ public class TankstormGameManager : NetworkBehaviour
 
     }
 
+    private void Start()
+    {
+        finishedGame = false;
+        playerWon = false;
+        playerLost = false;
+        playedPlayerWonSound = false;
+    }
+
     private void Update()
     {
         if (!IsServer)
@@ -47,38 +60,76 @@ public class TankstormGameManager : NetworkBehaviour
         switch (state.Value)
         {
             case State.BeforePlaying:
+                AudioManager.Instance.GetComponent<AudioSource>().volume = 0.1f;
                 break;
             case State.WaitingToStart:
                 break;
             case State.GamePlaying:
-                if (justStartedRound)
+                AudioManager.Instance.GetComponent<AudioSource>().volume = 0.05f;
+                if (EnemySpawner.Instance != null)
                 {
-                    if (SceneManager.GetActiveScene().name == "GameScene")
+                    if (justStartedRound && EnemySpawner.Instance.currentRound != 5)
                     {
-                        if (ChoosingSkillsUI.Instance != null)
-                            ChoosingSkillsUI.Instance.ResetMenuClientRpc();
-                        else
-                            Debug.Log("cant find instance");
+                        if (SceneManager.GetActiveScene().name == "GameScene")
+                        {
+                            if (ChoosingSkillsUI.Instance != null)
+                                ChoosingSkillsUI.Instance.ResetMenuClientRpc();
+                            else
+                                Debug.Log("cant find instance");
+                        }
+                        ChoosingSkillsUI.Instance.ResetReadyDictionnaryServerRpc();
+                        EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
+                        EnemySpawner.Instance.shouldSpawn = true;
+                        justAddedRound = false;
+                        gamePlayingTimer.Value = gamePlayingTimerMax;
+                        justStartedRound = false;
                     }
-                    ChoosingSkillsUI.Instance.ResetReadyDictionnaryServerRpc();
-                    EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
-                    EnemySpawner.Instance.shouldSpawn = true;
-                    justAddedRound = false;
-                    gamePlayingTimer.Value = gamePlayingTimerMax;
-                    justStartedRound = false;
+                    gamePlayingTimer.Value -= Time.deltaTime;
+                    if (gamePlayingTimer.Value <= 0f && EnemySpawner.Instance.currentRound != 5)
+                    {
+                        Player.Instance._currentHealth.Value = Player.Instance._maxHealth;
+                        state.Value = State.ChoosingSkills;
+                    }
+                    if (EnemySpawner.Instance.currentRound == 5)
+                    {
+                        if (!finishedGame)
+                        {
+                            EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
+                            EnemySpawner.Instance.shouldSpawn = true;
+                        }
+                        GameClockUI.Instance.Hide();
+                        Debug.Log("in round 5");
+                        _wolfBoss = GameObject.Find("WolfBoss(Clone)");
+                        if (_wolfBoss == null)
+                            Debug.Log("_wolfboss is null");
+                        else
+                        {
+                            if (_wolfBoss.GetComponent<Enemy>().isDead)
+                            {
+                                if (!playedPlayerWonSound)
+                                {
+                                    SFXManager.Instance.PlaySFX(11);
+                                    playedPlayerWonSound = true;
+                                }
+                                Round5UI.Instance.ShowParent();
+                                EnemySpawner.Instance.shouldSpawn = false;
+                                EnemySpawner.Instance.KillAllEnemiesServerRpc();
+                                justStartedRound = true;
+                                finishedGame = true;
+                                playerWon = true;
+                            }
+                        }
+                    }
                 }
-                gamePlayingTimer.Value -= Time.deltaTime;
-                if (gamePlayingTimer.Value <= 0f)
-                {
-                    state.Value = State.ChoosingSkills;
-                }
+                
                 break;
             case State.ChoosingSkills:
                 justStartedRound = true;
                 if (!justAddedRound)
                 {
                     EnemySpawner.Instance.KillAllEnemiesServerRpc();
-                    ChoosingSkillsUI.Instance.ShowChoosingSkillsClientRpc();
+                    if (!playerLost)
+                        ChoosingSkillsUI.Instance.ShowChoosingSkillsClientRpc();
                     EnemySpawner.Instance.shouldSpawn = false;
                     EnemySpawner.Instance.currentRound += 1;
                     justAddedRound = true;

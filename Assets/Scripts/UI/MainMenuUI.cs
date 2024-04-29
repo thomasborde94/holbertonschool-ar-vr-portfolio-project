@@ -11,9 +11,10 @@ public class MainMenuUI : MonoBehaviour
     private void Awake()
     {
         playButton.onClick.AddListener(() => {
-            Loader.Load(Loader.Scene.LobbyScene);
+            StartCoroutine(SFXManager.Instance.PlaySoundAndLoadLobbyScene());
         });
         quitButton.onClick.AddListener(() => {
+            SFXManager.Instance.PlaySFX(0);
             Application.Quit();
         });
 

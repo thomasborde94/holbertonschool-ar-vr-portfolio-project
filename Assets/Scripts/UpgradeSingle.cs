@@ -26,6 +26,7 @@ public class UpgradeSingle : MonoBehaviour
 
     public int _upgradeCost;
     [SerializeField] private TextMeshProUGUI _costText;
+    [SerializeField] public TextMeshProUGUI _descriptionText;
     [HideInInspector] public Image _image;
     public bool isAvailable;
 
@@ -46,6 +47,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeRainCdServerRpc(_multiplierRainCdUpgrade);
                 DisableUpgrade();
@@ -61,6 +63,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeRainDamageServerRpc();
                 DisableUpgrade();
@@ -76,6 +79,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMissileCdServerRpc(_multiplierMissileCdUpgrade);
                 DisableUpgrade();
@@ -90,6 +94,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMissileDamageServerRpc(_multiplierMissileBigUpgrade);
                 DisableUpgrade();
@@ -104,6 +109,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMissileDamageServerRpc(_multiplierMissileSmallUpgrade);
                 DisableUpgrade();
@@ -119,6 +125,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeBulletDamageServerRpc();
                 DisableUpgrade();
@@ -134,6 +141,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeBulletCdServerRpc(_bulletCdUpgradeBig);
                 DisableUpgrade();
@@ -148,6 +156,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeBulletCdServerRpc(_bulletCdUpgradeSmall);
                 DisableUpgrade();
@@ -163,6 +172,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMovementSpeedServerRpc(_movementSpeedBigUpgrade);
                 DisableUpgrade();
@@ -178,6 +188,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMovementSpeedServerRpc(_movementSpeedSmallUpgrade);
                 DisableUpgrade();
@@ -193,6 +204,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeShockwaveRadiusServerRpc(_shockwaveRadiusBigUpgrade);
                 DisableUpgrade();
@@ -207,6 +219,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeShockwaveRadiusServerRpc(_shockwaveRadiusSmallUpgrade);
                 DisableUpgrade();
@@ -222,6 +235,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeShockwaveCdServerRpc(_shockwaveCdUpgrade);
                 DisableUpgrade();
@@ -237,6 +251,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeShockwaveDamageServerRpc(_multiplierShockwaveBigUpgrade);
                 DisableUpgrade();
@@ -251,6 +266,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeShockwaveDamageServerRpc(_multiplierShockwaveSmallUpgrade);
                 DisableUpgrade();
@@ -265,6 +281,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMineDamageServerRpc(_multiplierMineBigUpgrade);
                 DisableUpgrade();
@@ -280,6 +297,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMineDamageServerRpc(_multiplierMineSmallUpgrade);
                 DisableUpgrade();
@@ -295,6 +313,7 @@ public class UpgradeSingle : MonoBehaviour
             SpendCoins();
             if (spentCoins)
             {
+                SFXManager.Instance.PlaySFX(8);
                 UpdateCost();
                 DataManager.Instance.UpgradeMineCdServerRpc(_mineCdUpgrade);
                 DisableUpgrade();
@@ -309,12 +328,16 @@ public class UpgradeSingle : MonoBehaviour
         currentColor.a = 0.5f;
         _image.color = currentColor;
 
+        Color currentTextColor = _descriptionText.color;
+        currentTextColor.a = 0.5f;
+        _descriptionText.color = currentTextColor;
+
         isAvailable = false;
     }
 
     private void SpendCoins()
     {
-        if (Player.Instance.coinAmount > _upgradeCost)
+        if (Player.Instance.coinAmount >= _upgradeCost)
         {
             spentCoins = true;
             Player.Instance.coinAmount -= _upgradeCost;

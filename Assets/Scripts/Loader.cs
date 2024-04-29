@@ -39,4 +39,10 @@ public static class Loader
         SceneManager.LoadScene(targetScene.ToString());
     }
 
+    public static void ReloadScene()
+    {
+        NetworkManager.Singleton.SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+    }
+
+
 }

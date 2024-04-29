@@ -8,7 +8,7 @@ public class EnemyAttackHitbox : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerControlsTEST.Instance.SetCurrentHealthLoss(1);
+            Player.Instance.SetCurrentHealthLoss(1);
         }
     }
 

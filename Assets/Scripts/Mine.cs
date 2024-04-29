@@ -35,10 +35,10 @@ public class Mine : NetworkBehaviour
                 enemy.SetCurrentHealthLossServerRpc(_mineDamage.value);
                 enemy.GotHitServerRpc();
             }
-            
+
+            SFXManager.Instance.PlaySFX(3);
             GameObject particles = Instantiate(_explosionParticles, transform.position, Quaternion.identity);
             NetworkObject particlesNO = particles.GetComponent<NetworkObject>();
-            Debug.Log("should have instantiated mine particles");
             particlesNO.Spawn(true);
             DespawnWithDelay(_destructionDelay);
             DespawnParticlesWithDelay(particlesNO, _destructionDelay);

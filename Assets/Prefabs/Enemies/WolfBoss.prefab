@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3121590530
+  GlobalObjectIdHash: 3564414928
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -70,7 +70,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 5064312575492835640}
-  _health: 500
   _speed: 3
   _rangeToAttack: 8
   _rangeToStopMoving: 4
@@ -121,27 +120,27 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1640423525
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1523721793
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1919845803
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.13070178
     TriggerNameHash: 1080829965
     TransitionIndex: 0
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: -1197562212
+    OriginatingState: -1087200342
     DestinationState: 1523721793
     TransitionDuration: 0.25
     TriggerNameHash: 1654612129
@@ -218,7 +217,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3

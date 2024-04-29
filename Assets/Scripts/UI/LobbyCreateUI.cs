@@ -23,14 +23,11 @@ public class LobbyCreateUI : MonoBehaviour
         });
         closeButton.onClick.AddListener(() =>
         {
-            Hide();
+            HideAndPlaySFX();
+            LobbyUI.Instance.Show();
         });
     }
 
-    private void Start()
-    {
-        Hide();
-    }
 
     public void Show()
     {
@@ -39,6 +36,11 @@ public class LobbyCreateUI : MonoBehaviour
 
     private void Hide()
     {
+        gameObject.SetActive(false);
+    }
+    private void HideAndPlaySFX()
+    {
+        SFXManager.Instance.PlaySFX(0);
         gameObject.SetActive(false);
     }
 }

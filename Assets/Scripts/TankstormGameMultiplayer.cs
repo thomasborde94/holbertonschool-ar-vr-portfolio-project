@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class TankstormGameMultiplayer : NetworkBehaviour
 {
-
     public const int MAX_PLAYER_AMOUNT = 2;
     private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiPlayer";
 
@@ -20,7 +19,7 @@ public class TankstormGameMultiplayer : NetworkBehaviour
     [SerializeField] private List<int> playerRoleList;
     [SerializeField] private GameObject playerPrefab;
 
-    private NetworkList<PlayerData> playerDataNetworkList;
+    public NetworkList<PlayerData> playerDataNetworkList;
     private string playerName;
 
 
@@ -35,7 +34,6 @@ public class TankstormGameMultiplayer : NetworkBehaviour
         playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
     }
 
-    
 
     // When PlayerDataNetworkList changes
     private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
@@ -246,4 +244,13 @@ public class TankstormGameMultiplayer : NetworkBehaviour
         PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
     }
 
+    public void InitializeNetworkVariables()
+    {
+        if (IsServer)
+        {
+            TankstormGameManager.Instance.gamePlayingTimer.Value = TankstormGameManager.Instance.gamePlayingTimerMax;
+            Player.Instance._currentHealth.Value = Player.Instance._maxHealth;
+            TankstormGameManager.Instance.state.Value = TankstormGameManager.State.GamePlaying;
+        }
+    }
 }

@@ -26,10 +26,12 @@ public class PlayerInputHandler : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        /*
         else
         {
             Destroy(gameObject);
         }
+        */
 
         moveAction = playerControls.FindActionMap(actionMapName).FindAction(move);
         shootAction = playerControls.FindActionMap(actionMapName).FindAction(shoot);

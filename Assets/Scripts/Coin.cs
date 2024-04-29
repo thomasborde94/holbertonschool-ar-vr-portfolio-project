@@ -17,7 +17,6 @@ public class Coin : NetworkBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("touched player");
             Player.Instance.coinAmount++;
             CoinsUI.Instance.UpdateCoinAmout();
 

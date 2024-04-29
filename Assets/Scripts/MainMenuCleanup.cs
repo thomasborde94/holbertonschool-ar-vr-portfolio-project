@@ -15,5 +15,8 @@ public class MainMenuCleanup : MonoBehaviour
 
         if (TankstormLobby.Instance != null)
             Destroy (TankstormLobby.Instance.gameObject);
+        if (TankstormGameManager.Instance != null)
+            Destroy(TankstormGameManager.Instance.gameObject);
+        
     }
 }

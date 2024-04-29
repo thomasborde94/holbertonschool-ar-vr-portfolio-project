@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class LobbyUI : MonoBehaviour
 {
+    public static LobbyUI Instance { get; private set; }
+
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button createLobbyButton;
     [SerializeField] private Button quickJoinButton;
@@ -21,21 +23,27 @@ public class LobbyUI : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         mainMenuButton.onClick.AddListener(() =>
         {
-            Loader.Load(Loader.Scene.MainMenuScene);
+
+            StartCoroutine(SFXManager.Instance.PlaySoundAndLoadMainMenuScene());
             TankstormLobby.Instance.LeaveLobby();
         });
         createLobbyButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             lobbyCreateUI.Show();
+            Hide();
         });
         quickJoinButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             TankstormLobby.Instance.QuickJoin();
         });
         joinCodeButton.onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             TankstormLobby.Instance.JoinWithCode(joinCodeInputField.text);
         });
 
@@ -82,5 +90,15 @@ public class LobbyUI : MonoBehaviour
     private void OnDestroy()
     {
         TankstormLobby.Instance.OnLobbyListChanged -= TankstormLobby_OnLobbyListChanged;
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    private void Hide()
+    {
+        gameObject.SetActive(false);
     }
 }

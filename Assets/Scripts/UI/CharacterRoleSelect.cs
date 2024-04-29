@@ -14,6 +14,7 @@ public class CharacterRoleSelect : MonoBehaviour
     {
         GetComponent<Button>().onClick.AddListener(() =>
         {
+            SFXManager.Instance.PlaySFX(0);
             TankstormGameMultiplayer.Instance.ChangePlayerRole(roleId);
         });
     }

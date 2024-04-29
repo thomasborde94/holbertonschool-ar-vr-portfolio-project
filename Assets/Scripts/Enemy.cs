@@ -165,7 +165,6 @@ public abstract class Enemy : NetworkBehaviour
     [ServerRpc(RequireOwnership =false)]
     public void SetCurrentHealthLossServerRpc(int healthAmountLost, ServerRpcParams serverRpcParams = default)
     {
-        Debug.Log("SetCurrentHealthLossServerRpc is called");
         _currentHealth.Value -= healthAmountLost;
     }
     [ClientRpc]

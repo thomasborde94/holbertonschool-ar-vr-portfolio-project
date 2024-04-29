@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 21647740
+  GlobalObjectIdHash: 59304840
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -70,7 +70,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 2529780894286210362}
-  _health: 15
   _speed: 4
   _rangeToAttack: 4
   _rangeToStopMoving: 3
@@ -123,27 +122,27 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1640423525
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1523721793
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1919845803
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.13070178
     TriggerNameHash: 1080829965
     TransitionIndex: 0
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: -1197562212
+    OriginatingState: -1087200342
     DestinationState: 1523721793
     TransitionDuration: 0.25
     TriggerNameHash: 1654612129
@@ -183,7 +182,7 @@ GameObject:
   - component: {fileID: 6029163575960564042}
   m_Layer: 0
   m_Name: AttackHitbox
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,9 +217,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

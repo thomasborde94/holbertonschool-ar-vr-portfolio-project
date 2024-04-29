@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1379126562
+  GlobalObjectIdHash: 3070415728
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -93,7 +93,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _anim: {fileID: 2737044408745300386}
-  _health: 15
   _speed: 4
   _rangeToAttack: 3
   _rangeToStopMoving: 2
@@ -144,27 +143,27 @@ MonoBehaviour:
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1640423525
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: 1523721793
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.25
     TriggerNameHash: 1080829965
     TransitionIndex: 1
   - IsCrossFadeExit: 0
     Layer: 0
     OriginatingState: -1919845803
-    DestinationState: -1197562212
+    DestinationState: -1087200342
     TransitionDuration: 0.13070178
     TriggerNameHash: 1080829965
     TransitionIndex: 0
   - IsCrossFadeExit: 0
     Layer: 0
-    OriginatingState: -1197562212
+    OriginatingState: -1087200342
     DestinationState: 1523721793
     TransitionDuration: 0.25
     TriggerNameHash: 1654612129
@@ -178,6 +177,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5685266662575842826}
     m_Modifications:
+    - target: {fileID: 5866393494308847957, guid: 7dc7b54399d54194e9f2619f1832e8d5,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6321436713527627283, guid: 7dc7b54399d54194e9f2619f1832e8d5,
         type: 3}
       propertyPath: m_LocalPosition.x
