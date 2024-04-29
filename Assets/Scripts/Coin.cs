@@ -42,7 +42,7 @@ public class Coin : NetworkBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        if (networkObject.IsSpawned)
+        if (networkObject.IsSpawned && IsServer)
         {
             networkObject.Despawn();
         }
