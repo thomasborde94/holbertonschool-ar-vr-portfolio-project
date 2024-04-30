@@ -10,8 +10,8 @@ public class EnemySpawner : NetworkBehaviour
     [SerializeField] private GameObject bossPrefab;
     [SerializeField] private GameObject spawnParticlesPrefab;
     [SerializeField] public float _timeBetweenSpawnRank = 2f;
-    [SerializeField] private float _spawnAreaWidth = 8f;
-    [SerializeField] private float _spawnAreaLength = 8f;
+    [SerializeField] private float _spawnAreaWidth = 40f;
+    [SerializeField] private float _spawnAreaLength = 40f;
 
     [SerializeField] public EnemyListSO _enemyListSO;
     public bool shouldSpawn = true;

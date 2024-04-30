@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainLoop: {fileID: 8300000, guid: 826f98ec62118b4428a88caf2c94c514, type: 3}
+  audioMixer: {fileID: 24100000, guid: 149f39f47dec11e44800002df9eca824, type: 2}
   musicState: 1
   canPlay: 1
 --- !u!82 &1959233138058585438
@@ -57,7 +58,8 @@ AudioSource:
   m_GameObject: {fileID: 8013540463072793500}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 149f39f47dec11e44800002df9eca824,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.1

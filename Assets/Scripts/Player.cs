@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
 
 
     [Header("Player")]
-    //[SerializeField] private FloatVariable _moveSpeed;
+
     public NetworkVariable<float> _moveSpeed = new NetworkVariable<float>(10f);
     [SerializeField] private float _rotateSpeed = 10f;
     [SerializeField] private float _towerRotationSpeed = 10f;
@@ -59,6 +59,7 @@ public class Player : NetworkBehaviour
     [HideInInspector] public float _nextMineTime = 2f;
     private float _delayBeforeBulletDespawn = 2.5f;
     private bool startedPlayingTankSound = false;
+
 
     private void Awake()
     {

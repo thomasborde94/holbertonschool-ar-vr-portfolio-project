@@ -16,7 +16,8 @@ public class Round5UI : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private GameObject _loadingUI;
 
-    private GameObject _player;
+    [SerializeField] private GameObject escapeUI;
+    
 
     private bool playedLostSound = false;
     private void Awake()
@@ -31,6 +32,7 @@ public class Round5UI : NetworkBehaviour
             TankstormGameMultiplayer.Instance.InitializeNetworkVariables();
             HideParentServerRpc();
             _loadingUI.SetActive(true);
+            TankstormGameManager.Instance.playerLost = false;
             Loader.ReloadScene();
         });
         mainMenuButton.onClick.AddListener(() =>
@@ -75,6 +77,8 @@ public class Round5UI : NetworkBehaviour
                 TankstormGameManager.Instance.playerLost = true;
                 _text.text = "YOU LOST !";
                 ShowParent();
+                if (escapeUI.activeSelf)
+                    escapeUI.SetActive(false);
                 if (EnemySpawner.Instance != null)
                 {
                     EnemySpawner.Instance.shouldSpawn = false;
@@ -101,13 +105,6 @@ public class Round5UI : NetworkBehaviour
 
     [ServerRpc(RequireOwnership =false)]
     public void HideParentServerRpc()
-    {
-        parentGo.SetActive(false);
-        //HideParentClientRpc();
-        
-    }
-    [ClientRpc]
-    private void HideParentClientRpc()
     {
         parentGo.SetActive(false);
     }

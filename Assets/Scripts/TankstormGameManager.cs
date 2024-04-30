@@ -124,12 +124,17 @@ public class TankstormGameManager : NetworkBehaviour
                 
                 break;
             case State.ChoosingSkills:
+                Debug.Log("inside Choosingskills state");
                 justStartedRound = true;
                 if (!justAddedRound)
                 {
+                    Debug.Log("inside !justAddeRound");
                     EnemySpawner.Instance.KillAllEnemiesServerRpc();
                     if (!playerLost)
+                    {
                         ChoosingSkillsUI.Instance.ShowChoosingSkillsClientRpc();
+                        Debug.Log("inside !playerLost");
+                    }
                     EnemySpawner.Instance.shouldSpawn = false;
                     EnemySpawner.Instance.currentRound += 1;
                     justAddedRound = true;
