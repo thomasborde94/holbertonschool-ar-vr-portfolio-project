@@ -182,7 +182,7 @@ public class ChoosingSkillsUI : NetworkBehaviour
 
     private void Roll()
     {
-        if (shouldIncreaseRollCost && Player.Instance.coinAmount > _rollCost)
+        if (shouldIncreaseRollCost && Player.Instance.coinAmount >= _rollCost)
         {
             if (Player.Instance.PlayerRoleString() == "Driver")
             {
