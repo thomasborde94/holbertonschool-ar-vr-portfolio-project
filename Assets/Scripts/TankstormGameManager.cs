@@ -111,7 +111,7 @@ public class TankstormGameManager : NetworkBehaviour
                                     SFXManager.Instance.PlaySFX(11);
                                     playedPlayerWonSound = true;
                                 }
-                                Round5UI.Instance.ShowParent();
+                                Round5UI.Instance.ShowParentClientRpc();
                                 EnemySpawner.Instance.shouldSpawn = false;
                                 EnemySpawner.Instance.KillAllEnemiesServerRpc();
                                 justStartedRound = true;

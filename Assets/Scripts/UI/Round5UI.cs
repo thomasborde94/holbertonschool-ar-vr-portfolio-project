@@ -76,7 +76,7 @@ public class Round5UI : NetworkBehaviour
                 }
                 TankstormGameManager.Instance.playerLost = true;
                 _text.text = "YOU LOST !";
-                ShowParent();
+                ShowParentClientRpc();
                 if (escapeUI.activeSelf)
                     escapeUI.SetActive(false);
                 if (EnemySpawner.Instance != null)
@@ -98,7 +98,8 @@ public class Round5UI : NetworkBehaviour
         Loader.LoadNetwork(Loader.Scene.MainMenuScene);
     }
 
-    public void ShowParent()
+    [ClientRpc]
+    public void ShowParentClientRpc()
     {
         parentGo.SetActive(true);
     }
