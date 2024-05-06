@@ -52,6 +52,7 @@ public class EnemySpawner : NetworkBehaviour
             enemyTimer += Time.deltaTime;
             _despawnTimer += Time.deltaTime;
 
+            // Spawns particles of enemies
             if (particlesTimer >= _timeBetweenSpawn)
             {
                 spawnPosition = GetRandomSpawnPosition();
@@ -60,6 +61,7 @@ public class EnemySpawner : NetworkBehaviour
                 _despawnTimer = 0f;
             }
 
+            // spawns enemies
             if (enemyTimer >= _timeBetweenSpawn + 0.2f)
             {
                 SpawnEnemyDelayServerRpc(spawnPosition);
@@ -70,6 +72,8 @@ public class EnemySpawner : NetworkBehaviour
             if (particlesNO != null && _despawnTimer >= 1f)
                 particlesNO.Despawn(true);
         }
+
+        // spawns boss
         if (shouldSpawn && currentRound == 5 && !shouldSpawnBoss)
             SpawnBoss();
     }
@@ -84,7 +88,7 @@ public class EnemySpawner : NetworkBehaviour
         shouldSpawnBoss = true;
     }
 
-
+    // Generate a random spawn position
     private Vector3 GetRandomSpawnPosition()
     {
         float randomX = Random.Range(-_spawnAreaWidth / 2f, _spawnAreaWidth / 2f);
@@ -110,7 +114,6 @@ public class EnemySpawner : NetworkBehaviour
     private void SpawnEnemyDelayServerRpc(Vector3 spawnPosition)
     {
         // Spawns the enemy
-
         int enemyIndex = Random.Range(0, Mathf.Min(enemyPrefabs.Count, currentRound));
         GameObject enemy = Instantiate(enemyPrefabs[enemyIndex], spawnPosition, Quaternion.identity);
         NetworkObject enemyNO = enemy.GetComponent<NetworkObject>();

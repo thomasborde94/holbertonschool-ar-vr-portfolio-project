@@ -19,7 +19,6 @@ public class Coin : NetworkBehaviour
         {
             Player.Instance.coinAmount++;
             CoinsUI.Instance.UpdateCoinAmout();
-
             DespawnWithDelay(2f);
         }
     }

@@ -134,6 +134,8 @@ public class TankstormGameMultiplayer : NetworkBehaviour
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
     }
 
+
+    #region Public properties
     public bool IsPlayerIndexConnected(int playerIndex)
     {
         return playerIndex < playerDataNetworkList.Count;
@@ -177,7 +179,25 @@ public class TankstormGameMultiplayer : NetworkBehaviour
     {
         ChangePlayerRoleServerRpc(roleId);
     }
+    public bool EveryPlayerHaveRole()
+    {
+        foreach (PlayerData playerData in playerDataNetworkList)
+        {
+            if ((playerData.roleId == 2))
+            {
+                // a player does not have a role
+                return false;
+            }
+        }
+        return true;
+    }
 
+
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+    #endregion
     [ServerRpc(RequireOwnership =false)]
     private void ChangePlayerRoleServerRpc(int roleId, ServerRpcParams serverRpcparams = default)
     {
@@ -220,24 +240,7 @@ public class TankstormGameMultiplayer : NetworkBehaviour
         return -1;
     }
 
-    public bool EveryPlayerHaveRole()
-    {
-        foreach (PlayerData playerData in playerDataNetworkList)
-        {
-            if ((playerData.roleId == 2))
-            {
-                // a player does not have a role
-                return false;
-            }    
-        }
-        return true;
-    }
-
-
-    public string GetPlayerName()
-    {
-        return playerName;
-    }
+    
     public void SetPlayerName(string playerName)
     {
         this.playerName = playerName;

@@ -19,8 +19,4 @@ public class Watcher_B : Enemy
             _currentHealth.Value = 10 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
     }
 
-    public override void Movement()
-    {
-        base.Movement();
-    }
 }

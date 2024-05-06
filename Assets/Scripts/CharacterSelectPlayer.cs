@@ -33,27 +33,12 @@ public class CharacterSelectPlayer : MonoBehaviour
         UpdatePlayer();
     }
 
-    /*private void UpdatePlayer()
-    {
-        if (TankstormGameMultiplayer.Instance.IsPlayerIndexConnected(playerIndex))
-        {
-            Show();
-
-            PlayerData playerData = TankstormGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
-            readyGameobject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-
-            playerRole.SetPlayerRole(TankstormGameMultiplayer.Instance.GetPlayerRole(playerData.roleId));
-        }
-        else
-        {
-            Hide();
-        }
-    }
-    */
+    // Updates playerRole when selecting role
     private void UpdatePlayer()
     {
         if (TankstormGameMultiplayer.Instance.IsPlayerIndexConnected(playerIndex))
         {
+            // Shows the player on screen if connected
             Show();
 
             PlayerData playerData = TankstormGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
@@ -65,8 +50,6 @@ public class CharacterSelectPlayer : MonoBehaviour
             }
 
             playerNameText.text = playerData.playerName.ToString();
-
-            
         }
         else
         {

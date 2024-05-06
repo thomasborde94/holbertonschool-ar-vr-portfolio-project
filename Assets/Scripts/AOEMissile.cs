@@ -8,6 +8,8 @@ public class AOEMissile : NetworkBehaviour
     [SerializeField] private IntVariable _missileDamageToEnemies;
     private SphereCollider _sphereCollider;
 
+    #region Unity Lifecycle
+
     private void Awake()
     {
         _sphereCollider = GetComponent<SphereCollider>();
@@ -21,20 +23,20 @@ public class AOEMissile : NetworkBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("touched an enemy with aoeCollider");
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                //enemy.SetCurrentHealthLossClientRpc(_missileDamageToEnemies);
                 enemy.SetCurrentHealthLossServerRpc(_missileDamageToEnemies.value);
                 enemy.GotHitServerRpc();
             }
         }
     }
 
+    #endregion
+
+    // Enables AOE damage of the missile
     public void ActiveAOE()
     {
         _sphereCollider.enabled = true;
     }
-
 }

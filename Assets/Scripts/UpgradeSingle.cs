@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UpgradeSingle : MonoBehaviour
 {
+    #region Show in Inspector
     [SerializeField] private float _multiplierMineBigUpgrade;
     [SerializeField] private float _multiplierMineSmallUpgrade;
     [SerializeField] private float _mineCdUpgrade;
@@ -30,6 +31,7 @@ public class UpgradeSingle : MonoBehaviour
     [HideInInspector] public Image _image;
     public bool isAvailable;
 
+    #endregion
     private bool spentCoins;
 
     private void Awake()
@@ -39,7 +41,7 @@ public class UpgradeSingle : MonoBehaviour
         _costText.text = _upgradeCost.ToString();
         spentCoins = false;
     }
-
+    #region Upgrade buttons
     public void RainCd()
     {
         if (isAvailable)
@@ -321,6 +323,8 @@ public class UpgradeSingle : MonoBehaviour
             spentCoins = false;
         }
     }
+    #endregion
+
 
     private void DisableUpgrade()
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[CreateAssetMenu]
+
 public class EnemyListSO : ScriptableObject, IEnumerable<GameObject>
 {
     public List<GameObject> enemyList = new List<GameObject>();

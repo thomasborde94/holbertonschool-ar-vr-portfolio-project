@@ -13,10 +13,6 @@ public class Wolfboss :Enemy
             Init();
     }
 
-    public override void Movement()
-    {
-        base.Movement();
-    }
 
     public override void Init()
     {
@@ -25,9 +21,4 @@ public class Wolfboss :Enemy
             _currentHealth.Value = 5;
     }
 
-    public override void Update()
-    {
-        base.Update();
-        Debug.Log(_currentHealth.Value);
-    }
 }

@@ -35,6 +35,8 @@ public class TankstormGameManager : NetworkBehaviour
 
     private Dictionary<ulong, bool> playerReadyDictionary;
 
+
+    #region Unity Lifecycle
     private void Awake()
     {
         Instance = this;
@@ -60,80 +62,35 @@ public class TankstormGameManager : NetworkBehaviour
         switch (state.Value)
         {
             case State.BeforePlaying:
-                AudioManager.Instance.GetComponent<AudioSource>().volume = 0.1f;
                 break;
             case State.WaitingToStart:
                 break;
             case State.GamePlaying:
-                AudioManager.Instance.GetComponent<AudioSource>().volume = 0.05f;
                 if (EnemySpawner.Instance != null)
                 {
                     if (justStartedRound && EnemySpawner.Instance.currentRound != 5)
-                    {
-                        if (SceneManager.GetActiveScene().name == "GameScene")
-                        {
-                            if (ChoosingSkillsUI.Instance != null)
-                                ChoosingSkillsUI.Instance.ResetMenuClientRpc();
-                            else
-                                Debug.Log("cant find instance");
-                        }
-                        ChoosingSkillsUI.Instance.ResetReadyDictionnaryServerRpc();
-                        EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
-                        EnemySpawner.Instance.shouldSpawn = true;
-                        justAddedRound = false;
-                        gamePlayingTimer.Value = gamePlayingTimerMax;
-                        justStartedRound = false;
-                    }
+                        BeginningOfRound();
+
                     gamePlayingTimer.Value -= Time.deltaTime;
+
                     if (gamePlayingTimer.Value <= 0f && EnemySpawner.Instance.currentRound != 5)
                     {
                         Player.Instance._currentHealth.Value = Player.Instance._maxHealth;
                         state.Value = State.ChoosingSkills;
                     }
                     if (EnemySpawner.Instance.currentRound == 5)
-                    {
-                        if (!finishedGame)
-                        {
-                            EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
-                            EnemySpawner.Instance.shouldSpawn = true;
-                        }
-                        GameClockUI.Instance.Hide();
-                        Debug.Log("in round 5");
-                        _wolfBoss = GameObject.Find("WolfBoss(Clone)");
-                        if (_wolfBoss == null)
-                            Debug.Log("_wolfboss is null");
-                        else
-                        {
-                            if (_wolfBoss.GetComponent<Enemy>().isDead)
-                            {
-                                if (!playedPlayerWonSound)
-                                {
-                                    SFXManager.Instance.PlaySFX(11);
-                                    playedPlayerWonSound = true;
-                                }
-                                Round5UI.Instance.ShowParentClientRpc();
-                                EnemySpawner.Instance.shouldSpawn = false;
-                                EnemySpawner.Instance.KillAllEnemiesServerRpc();
-                                justStartedRound = true;
-                                finishedGame = true;
-                                playerWon = true;
-                            }
-                        }
-                    }
+                        BeginningOfRoundFive();
                 }
                 
                 break;
             case State.ChoosingSkills:
-                Debug.Log("inside Choosingskills state");
                 justStartedRound = true;
                 if (!justAddedRound)
                 {
-                    Debug.Log("inside !justAddeRound");
                     EnemySpawner.Instance.KillAllEnemiesServerRpc();
                     if (!playerLost)
                     {
                         ChoosingSkillsUI.Instance.ShowChoosingSkillsClientRpc();
-                        Debug.Log("inside !playerLost");
                     }
                     EnemySpawner.Instance.shouldSpawn = false;
                     EnemySpawner.Instance.currentRound += 1;
@@ -148,6 +105,56 @@ public class TankstormGameManager : NetworkBehaviour
         }
     }
 
+    #endregion
+
+    private void BeginningOfRound()
+    {
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            if (ChoosingSkillsUI.Instance != null)
+                ChoosingSkillsUI.Instance.ResetMenuClientRpc();
+            else
+                Debug.Log("cant find instance");
+        }
+
+        ChoosingSkillsUI.Instance.ResetReadyDictionnaryServerRpc();
+        EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
+        EnemySpawner.Instance.shouldSpawn = true;
+        justAddedRound = false;
+        gamePlayingTimer.Value = gamePlayingTimerMax;
+        justStartedRound = false;
+    }
+
+    private void BeginningOfRoundFive()
+    {
+        if (!finishedGame)
+        {
+            EnemySpawner.Instance._timeBetweenSpawn = EnemySpawner.Instance._timeBetweenSpawnRank * (1.5f / EnemySpawner.Instance.currentRound);
+            EnemySpawner.Instance.shouldSpawn = true;
+        }
+        GameClockUI.Instance.Hide();
+        Debug.Log("in round 5");
+        _wolfBoss = GameObject.Find("WolfBoss(Clone)");
+        if (_wolfBoss == null)
+            Debug.Log("_wolfboss is null");
+        else
+        {
+            if (_wolfBoss.GetComponent<Enemy>().isDead)
+            {
+                if (!playedPlayerWonSound)
+                {
+                    SFXManager.Instance.PlaySFX(11);
+                    playedPlayerWonSound = true;
+                }
+                Round5UI.Instance.ShowParentClientRpc();
+                EnemySpawner.Instance.shouldSpawn = false;
+                EnemySpawner.Instance.KillAllEnemiesServerRpc();
+                justStartedRound = true;
+                finishedGame = true;
+                playerWon = true;
+            }
+        }
+    }
 
     [ServerRpc(RequireOwnership =false)]
     public void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
@@ -175,6 +182,8 @@ public class TankstormGameManager : NetworkBehaviour
         Debug.Log("All clients ready:  " + allClientsReady);
     }
 
+    #region Public properties
+
     public bool IsLocalPlayerReady()
     {
         return isLocalPlayerReady;
@@ -197,4 +206,5 @@ public class TankstormGameManager : NetworkBehaviour
     {
         return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
     }
+    #endregion
 }

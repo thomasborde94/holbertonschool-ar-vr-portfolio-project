@@ -40,6 +40,7 @@ public class Shockwave : MonoBehaviour
         _sphereCollider.enabled = false;
     }
 
+    // Draw shockwave
     private void Draw(float currentRadius)
     {
         float angleBetweenPoints = 360f / _pointsCount;
@@ -62,7 +63,6 @@ public class Shockwave : MonoBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                //enemy.SetCurrentHealthLossClientRpc(_shockwaveDamage);
                 enemy.SetCurrentHealthLossServerRpc(_shockwaveDamage.value);
                 enemy.GotHitServerRpc();
             }

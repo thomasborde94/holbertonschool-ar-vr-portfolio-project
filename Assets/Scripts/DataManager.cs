@@ -14,8 +14,6 @@ public class DataManager : NetworkBehaviour
     [SerializeField] private FloatVariable _shockwaveCd;
     [SerializeField] private FloatVariable _shockwaveRadius;
     [SerializeField] private FloatVariable _shockwaveHitboxRadius;
-    //[SerializeField] private FloatVariable _movementSpeed;
-
     [SerializeField] private FloatVariable _bulletCd;
     [SerializeField] private IntVariable _bulletDamage;
     [SerializeField] private IntVariable _missileDamage;
@@ -74,6 +72,8 @@ public class DataManager : NetworkBehaviour
         if (!initialized)
             InitializeSkillsData();
     }
+
+    #region Updates SO
 
     [ServerRpc(RequireOwnership = false)]
     public void UpgradeRainCdServerRpc(float _rainCdUpgrade)
@@ -176,7 +176,6 @@ public class DataManager : NetworkBehaviour
     [ClientRpc]
     private void UpgradeMovementSpeedClientRpc(float _movementSpeedUpgrade)
     {
-        //_movementSpeed.value = _movementSpeedUpgrade;
         Player.Instance._moveSpeed.Value = _movementSpeedUpgrade;
         Debug.Log("movementspeed is now " + Player.Instance._moveSpeed.Value);
     }
@@ -258,4 +257,5 @@ public class DataManager : NetworkBehaviour
         _mineDamage.value = newValue;
         Debug.Log("Mine damage is now " + _mineDamage.value);
     }
+    #endregion
 }

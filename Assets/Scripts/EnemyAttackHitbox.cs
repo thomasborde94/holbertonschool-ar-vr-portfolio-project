@@ -11,7 +11,4 @@ public class EnemyAttackHitbox : MonoBehaviour
             Player.Instance.SetCurrentHealthLoss(1);
         }
     }
-
-
-
 }

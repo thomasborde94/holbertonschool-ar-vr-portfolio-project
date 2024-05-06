@@ -8,8 +8,6 @@ public class CharacterSelectReady : NetworkBehaviour
 {
     public static CharacterSelectReady Instance { get; private set; }
 
-    //[SerializeField] private GameObject waitingScreen;
-
     public event EventHandler OnReadyChanged;
 
     private Dictionary<ulong, bool> playerReadyDictionary;
@@ -20,18 +18,14 @@ public class CharacterSelectReady : NetworkBehaviour
         playerReadyDictionary = new Dictionary<ulong, bool>();
     }
 
-    private void Start()
-    {
-        //Hide(waitingScreen);
-    }
-
     public void SetPlayerReady()
     {
         TankstormGameManager.Instance.isLocalPlayerReady = true;
-        //Show(waitingScreen);
         SetPlayerReadyServerRpc();
     }
 
+
+    // Sets player to Ready, if all client are ready, launchs the game Scene
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
@@ -74,16 +68,5 @@ public class CharacterSelectReady : NetworkBehaviour
     public bool IsPlayerReady(ulong clientId)
     {
         return playerReadyDictionary.ContainsKey(clientId) && playerReadyDictionary[clientId];
-    }
-
-
-    private void Show(GameObject go)
-    {
-        go.SetActive(true);
-    }
-
-    private void Hide(GameObject go)
-    {
-        go.SetActive(false);
     }
 }

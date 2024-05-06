@@ -19,10 +19,5 @@ public class Lizard_A : Enemy
         if (IsServer)
             _currentHealth.Value = 15 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
     }
-
-    public override void Movement()
-    {
-        base.Movement();
-    }
 }
 

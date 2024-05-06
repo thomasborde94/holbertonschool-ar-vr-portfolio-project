@@ -10,17 +10,11 @@ public class Catfish_B : Enemy
     {
         if (IsServer)
             Init();
-        //Health = base._health;
     }
     public override void Init()
     {
         base.Init();
         if (IsServer)
             _currentHealth.Value = 15 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
-    }
-
-    public override void Movement()
-    {
-        base.Movement();
     }
 }

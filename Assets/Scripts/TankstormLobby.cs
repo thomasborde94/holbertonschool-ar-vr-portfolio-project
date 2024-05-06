@@ -100,7 +100,7 @@ public class TankstormLobby : MonoBehaviour
         }
     }
 
-
+    // Creates allocation with Unity Relay
     private async Task<Allocation> AllocateRelay()
     {
         try
@@ -116,6 +116,7 @@ public class TankstormLobby : MonoBehaviour
         }
     }
 
+    // Gets Relay join code from associated allocation
     private async Task<string> GetRelayJoinCode(Allocation allocation)
     {
         try
@@ -130,6 +131,7 @@ public class TankstormLobby : MonoBehaviour
         }
     }
 
+    // Join the relay allocation with joincode
     private async Task<JoinAllocation> JoinRelay(string joinCode)
     {
         try
@@ -262,7 +264,7 @@ public class TankstormLobby : MonoBehaviour
             string relayJoinCode = joinedLobby.Data[KEY_RELAY_JOIN_CODE].Value;
             // Joins the relay
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
-            // REMOVE THIS IF NOT WORKING, AND UNCOMMENT BELOW
+
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData(
                 joinAllocation.RelayServer.IpV4,
                 (ushort)joinAllocation.RelayServer.Port,

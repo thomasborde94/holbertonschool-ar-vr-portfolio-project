@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,11 +10,16 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioClip mainLoop;
     [SerializeField] private AudioMixer audioMixer;
+    
 
     public int musicState = 1;
     [HideInInspector] public bool canPlay = true;
+    [HideInInspector] public string volumeId = "volumeId";
 
     private AudioSource audioPlayer;
+    private Slider soundSlider;
+
+    #region Unity Lifecycle
 
     private void Awake()
     {
@@ -26,9 +32,11 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        soundSlider = GameObject.Find("VolumeSlider").GetComponent<Slider>();
         audioPlayer = GetComponent<AudioSource>();
-        float volume = 0.5f;
-        audioMixer.SetFloat("MasterVolume", Mathf.Log(volume) * 20);
+        float volume = PlayerPrefs.GetFloat(volumeId, 0);
+        soundSlider.value = volume;
+        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20);
     }
 
     private void Update()
@@ -38,11 +46,16 @@ public class AudioManager : MonoBehaviour
             canPlay = false;
             if (musicState == 1)
             {
-                audioPlayer.clip = mainLoop;
-                audioPlayer.Play();
-                audioPlayer.loop = true;
+                PlayMainMusic();
             }
         }
     }
+    #endregion
 
+    private void PlayMainMusic()
+    {
+        audioPlayer.clip = mainLoop;
+        audioPlayer.Play();
+        audioPlayer.loop = true;
+    }
 }

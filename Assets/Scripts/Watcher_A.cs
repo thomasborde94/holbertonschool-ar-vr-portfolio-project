@@ -21,11 +21,6 @@ public class Watcher_A : Enemy
             _currentHealth.Value = 10 * (int)Math.Pow(EnemySpawner.Instance.currentRound, EnemySpawner.Instance.currentRound);
     }
 
-    public override void Movement()
-    {
-        base.Movement();
-    }
-
     public new bool CanMove()
     {
         if (_anim.GetCurrentAnimatorStateInfo(0).IsName("battleidle") ||

@@ -51,14 +51,9 @@ public class EscapeUI : NetworkBehaviour
     void Update()
     {
         HandleEscapeUI();
-        SetMasterVolume();
+        //SetMasterVolume();
     }
 
-    public void SetMasterVolume()
-    {
-        float volume = soundSlider.value;
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume)*20);
-    }
     private void HandleEscapeUI()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

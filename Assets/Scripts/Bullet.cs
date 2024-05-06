@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Bullet : NetworkBehaviour
 {
@@ -65,9 +66,7 @@ public class Bullet : NetworkBehaviour
             else
             {
                 _aoeMissile.ActiveAOE();
-                GameObject explosion = Instantiate(_missileExplosionParticles, transform.position, Quaternion.identity);
-                Destroy(explosion.gameObject, 1f);
-                Destroy(gameObject, 0.1f);
+                MissileExplosionServerRpc();
             }
         }
     }
@@ -79,13 +78,25 @@ public class Bullet : NetworkBehaviour
         if (enemy != null)
         {
             Enemy enemyScript = enemy.GetComponent<Enemy>();
-            //enemyScript.SetCurrentHealthLossClientRpc(_bulletDamageToEnemies);
             enemyScript.SetCurrentHealthLossServerRpc(_bulletDamageToEnemies.value);
             enemyScript.GotHitServerRpc();
         }
         
     }
 
+
+    // Instantiates and despawns missile particles
+    [ServerRpc(RequireOwnership =false)]
+    private void MissileExplosionServerRpc()
+    {
+        GameObject explosion = Instantiate(_missileExplosionParticles, transform.position, Quaternion.identity);
+        NetworkObject explosionNO = explosion.GetComponent<NetworkObject>();
+        explosionNO.Spawn();
+        DespawnParticlesWithDelay(explosionNO, 0.09f);
+        DespawnWithDelay(0.1f);
+    }
+
+    #region Coroutines
 
     public void DespawnWithDelay(float delay)
     {
@@ -97,7 +108,20 @@ public class Bullet : NetworkBehaviour
 
         if (networkObject.IsSpawned)
         {
-            networkObject.Despawn();
+            networkObject.Despawn(true);
         }
     }
+
+    private void DespawnParticlesWithDelay(NetworkObject particles, float delay)
+    {
+        StartCoroutine(DespawnParticlesCoroutine(particles, delay));
+    }
+    private IEnumerator DespawnParticlesCoroutine(NetworkObject particles, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (particles.IsSpawned)
+            particles.Despawn(true);
+    }
+    #endregion
 }

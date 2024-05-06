@@ -13,6 +13,7 @@ public class Player : NetworkBehaviour
 {
     public static Player Instance {  get; private set; }
 
+    #region Show in Inspector
 
     [Header("Player")]
 
@@ -50,7 +51,7 @@ public class Player : NetworkBehaviour
 
     public int coinAmount = 0;
 
-
+    #endregion
 
     private float _nextShotTime = 0f;
     [HideInInspector] public float _nextAOEMissileTime = 2f;
@@ -60,7 +61,7 @@ public class Player : NetworkBehaviour
     private float _delayBeforeBulletDespawn = 2.5f;
     private bool startedPlayingTankSound = false;
 
-
+    #region Unity Lifecycle
     private void Awake()
     {
         Instance = this;
@@ -100,8 +101,8 @@ public class Player : NetworkBehaviour
         }
     }
 
-
-
+    #endregion
+    #region Player controls and abilities
     private void HandleMovementServerAuth()
     {
         Vector2 inputVector = inputHandler.MoveInput;
@@ -283,6 +284,7 @@ public class Player : NetworkBehaviour
     private void CallBlastClientRpc()
     {
         _shockwave._lineRenderer.enabled = true;
+        // Enables hit collider for shockwave and draws it
         StartCoroutine(_shockwave.Blast());
     }
     [ServerRpc(RequireOwnership =false)]
@@ -432,7 +434,8 @@ public class Player : NetworkBehaviour
         newMissile.Shoot(_aoeMissileSpeed);
         newMissile.DespawnWithDelay(_delayBeforeBulletDespawn);
     }
-
+    #endregion
+    #region Public properties
     public float GetCurrentHealthPart()
     {
         return (_currentHealth.Value / _maxHealth);
@@ -461,6 +464,8 @@ public class Player : NetworkBehaviour
             return null;
     }
 
+    #endregion
+
     public void DespawnWithDelay(NetworkObject networkObject, float delay)
     {
         StartCoroutine(DespawnCoroutine(networkObject, delay));
@@ -474,23 +479,4 @@ public class Player : NetworkBehaviour
             networkObject.Despawn();
         }
     }
-
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            Debug.Log("an enemy hit the player");
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            Debug.Log("an enemy hit the player");
-        }
-    }
-    */
-
 }

@@ -10,7 +10,6 @@ public abstract class Enemy : NetworkBehaviour
 {
     [SerializeField] protected Animator _anim;
 
-    //[SerializeField] protected int _health;
     [SerializeField] protected float _speed;
     [SerializeField] protected float _rangeToAttack;
     [SerializeField] protected float _rangeToStopMoving;
@@ -33,6 +32,8 @@ public abstract class Enemy : NetworkBehaviour
     private bool droppedCoin = false;
     private List<GameObject> droppedCoins = new List<GameObject>();
     public float distance;
+
+    #region Unity Lifecycle
 
     private void Start()
     {
@@ -66,18 +67,7 @@ public abstract class Enemy : NetworkBehaviour
             TriggerDeathServerRpc();
 
     }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void TriggerDeathServerRpc()
-    {
-        _anim.SetBool("Dead", true);
-        Destroy(gameObject, 3f);
-        if (!droppedCoin)
-        {
-            DropCoins();
-        }
-            
-    }
+    #endregion
 
     public virtual void Movement()
     {
@@ -112,65 +102,6 @@ public abstract class Enemy : NetworkBehaviour
         else
             Debug.Log("cant find player");
 
-    }
-
-    private IEnumerator ResetAttackTrigger(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        _anim.ResetTrigger("Attack"); //
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void GotHitServerRpc()
-    {
-        if (_currentHealth.Value <= 0)
-            SetIsDeadClientRpc(true);
-
-        else
-            _anim.SetTrigger("Hit");
-    }
-
-    public bool CanMove()
-    {
-        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("battleidle") ||
-                _anim.GetCurrentAnimatorStateInfo(0).IsName("attack1withhitbox") ||
-                _anim.GetCurrentAnimatorStateInfo(0).IsName("hit"))
-            return false;
-        if (distance < _rangeToStopMoving)
-            return false;
-        else
-            return true;
-    }
-
-    public bool IsInRangeToAttack()
-    {
-        if (distance < _rangeToStopMoving)
-            return true;
-        else
-            return false;
-    }
-
-    public float GetCurrentHealthPart()
-    {
-        return (_currentHealth.Value / _maxHealth);
-    }
-
-    /*
-    [ClientRpc]
-    public void SetCurrentHealthLossClientRpc(int healthAmountLost, ClientRpcParams clientRpcParams = default)
-    {
-        _currentHealth.Value -= healthAmountLost;
-    }
-    */
-    [ServerRpc(RequireOwnership =false)]
-    public void SetCurrentHealthLossServerRpc(int healthAmountLost, ServerRpcParams serverRpcParams = default)
-    {
-        _currentHealth.Value -= healthAmountLost;
-    }
-    [ClientRpc]
-    public void SetIsDeadClientRpc(bool value, ClientRpcParams clientRpcParams = default)
-    {
-        isDead = value;
     }
 
     private void DropCoins()
@@ -218,5 +149,73 @@ public abstract class Enemy : NetworkBehaviour
 
         droppedCoins.Clear();
     }
+    private IEnumerator ResetAttackTrigger(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _anim.ResetTrigger("Attack");
+    }
 
+    #region RPCs
+    [ServerRpc(RequireOwnership = false)]
+    private void TriggerDeathServerRpc()
+    {
+        _anim.SetBool("Dead", true);
+        Destroy(gameObject, 3f);
+        if (!droppedCoin)
+        {
+            DropCoins();
+        }
+            
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    public void GotHitServerRpc()
+    {
+        if (_currentHealth.Value <= 0)
+            SetIsDeadClientRpc(true);
+
+        else
+            _anim.SetTrigger("Hit");
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetCurrentHealthLossServerRpc(int healthAmountLost, ServerRpcParams serverRpcParams = default)
+    {
+        _currentHealth.Value -= healthAmountLost;
+    }
+    [ClientRpc]
+    public void SetIsDeadClientRpc(bool value, ClientRpcParams clientRpcParams = default)
+    {
+        isDead = value;
+    }
+    #endregion
+
+    #region Public properties
+    public bool CanMove()
+    {
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("battleidle") ||
+                _anim.GetCurrentAnimatorStateInfo(0).IsName("attack1withhitbox") ||
+                _anim.GetCurrentAnimatorStateInfo(0).IsName("hit"))
+            return false;
+        if (distance < _rangeToStopMoving)
+            return false;
+        else
+            return true;
+    }
+
+    public bool IsInRangeToAttack()
+    {
+        if (distance < _rangeToStopMoving)
+            return true;
+        else
+            return false;
+    }
+
+    public float GetCurrentHealthPart()
+    {
+        return (_currentHealth.Value / _maxHealth);
+    }
+
+    #endregion
 }
