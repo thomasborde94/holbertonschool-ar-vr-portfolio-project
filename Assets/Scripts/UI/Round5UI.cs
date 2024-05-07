@@ -61,10 +61,8 @@ public class Round5UI : NetworkBehaviour
 
     private void Update()
     {
-
-
         if (TankstormGameManager.Instance.playerWon)
-            _text.text = "YOU WON !";
+            ChangeEndTextServerRpc("YOU WON !");
         if (Player.Instance != null)
         {
             if (Player.Instance._currentHealth.Value <= 0)
@@ -75,7 +73,7 @@ public class Round5UI : NetworkBehaviour
                     playedLostSound = true;
                 }
                 TankstormGameManager.Instance.playerLost = true;
-                _text.text = "YOU LOST !";
+                ChangeEndTextServerRpc("YOU LOST !");
                 ShowParentClientRpc();
                 if (escapeUI.activeSelf)
                     escapeUI.SetActive(false);
@@ -108,5 +106,16 @@ public class Round5UI : NetworkBehaviour
     public void HideParentServerRpc()
     {
         parentGo.SetActive(false);
+    }
+
+    [ServerRpc(RequireOwnership =true)]
+    private void ChangeEndTextServerRpc(string text)
+    {
+        ChangeEndTextClientRpc(text);
+    }
+    [ClientRpc]
+    private void ChangeEndTextClientRpc(string text)
+    {
+        _text.text = text;
     }
 }

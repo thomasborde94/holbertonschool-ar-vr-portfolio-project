@@ -61,7 +61,11 @@ public class Bullet : NetworkBehaviour
             {
                 Enemy enemy = other.GetComponent<Enemy>();
                 if (enemy != null)
-                      EnemyHitWithBulletServerRpc(enemy.index);
+                {
+                    EnemyHitWithBulletServerRpc(enemy.index);
+                    NetworkObject bulletNO = GetComponent<NetworkObject>();
+                    bulletNO.Despawn(true);
+                }
             }
             else
             {
