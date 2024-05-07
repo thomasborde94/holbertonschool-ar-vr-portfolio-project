@@ -1,8 +1,7 @@
 <h1> Portfolio Project: Tankstorm</h1>
 <p> Tankstorm is my end of second year project at Holberton. It's an online cooperative multiplayer game where two players fight against monsters spawning.</p>
-<br>
 <p>Both players will play the same character : a tank in an hostile zone.</p><br>
-<p>A player will drive the tank and the other will shoot at enemies, on top of botch players having unique abilites.</p>
+<p>A player will drive the tank and the other will shoot at enemies, on top of both players having unique abilites.</p>
 <p>At the end of every rounds, the players will be able to upgrade their abilities. The more monsters you kill, the more gold you get to upgrade your tank.</p>
 <br>
 <p>Finally, at the 5th round, the boss will spawn, there will not be any timer to finish the round, just kill it or die trying !</p>
