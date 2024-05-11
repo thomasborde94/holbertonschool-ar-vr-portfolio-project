@@ -73,7 +73,7 @@ public class DataManager : NetworkBehaviour
             InitializeSkillsData();
     }
 
-    #region Updates SO
+    #region Updates SO when upgrading
 
     [ServerRpc(RequireOwnership = false)]
     public void UpgradeRainCdServerRpc(float _rainCdUpgrade)

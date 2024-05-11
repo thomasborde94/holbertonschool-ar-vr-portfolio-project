@@ -70,7 +70,7 @@ MonoBehaviour:
   isLocalPlayerReady: 0
   gamePlayingTimer:
     m_InternalValue: 0
-  gamePlayingTimerMax: 10
+  gamePlayingTimerMax: 30
   justStartedRound: 1
   playerLost: 0
   playerWon: 0

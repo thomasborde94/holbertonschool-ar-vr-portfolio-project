@@ -32,7 +32,6 @@ public class Rain : NetworkBehaviour
         if (_nextTickTime >= _damageTickCooldown)
         {
             enemy.GotHitServerRpc();
-            //enemy.SetCurrentHealthLossClientRpc(_rainDamage);
             enemy.SetCurrentHealthLossServerRpc(_rainDamage.value);
             _nextTickTime = 0f;
         }

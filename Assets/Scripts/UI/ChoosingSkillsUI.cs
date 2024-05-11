@@ -118,21 +118,21 @@ public class ChoosingSkillsUI : NetworkBehaviour
                 return;
             }
 
-            // Sélectionnez un indice d'upgrade aléatoire dans la liste des indices disponibles
+            // Sélectionne un indice d'upgrade aléatoire dans la liste des indices disponibles
             int randomUpgradeIndex = UnityEngine.Random.Range(0, availableUpgradeIndices.Count);
             int selectedUpgradeIndex = availableUpgradeIndices[randomUpgradeIndex];
 
-            // Sélectionnez l'upgrade correspondant à l'indice choisi
+            // Sélectionne l'upgrade correspondant à l'indice choisi
             GameObject selectedUpgrade = _driverUpgrades[selectedUpgradeIndex];
 
-            // Si le slot ou l'upgrade sélectionné est null, passez au suivant
+            // Si le slot ou l'upgrade sélectionné est null, passe au suivant
             if (slot == null || selectedUpgrade == null)
             {
                 Debug.LogWarning("Slot or selected upgrade is null!");
                 continue;
             }
 
-            // Définissez le parent de l'upgrade comme le slot sélectionné
+            // Définit le parent de l'upgrade comme le slot sélectionné
             selectedUpgrade.transform.SetParent(slot.transform, false);
             selectedUpgrade.gameObject.SetActive(true);
 
@@ -150,18 +150,18 @@ public class ChoosingSkillsUI : NetworkBehaviour
 
         foreach (GameObject slot in _slots)
         {
-            // Vérifiez s'il reste des upgrades disponibles
+            // Vérifie s'il reste des upgrades disponibles
             if (availableUpgradeIndices.Count == 0)
             {
                 Debug.LogWarning("No upgrades available!");
                 return;
             }
 
-            // Sélectionnez un indice d'upgrade aléatoire dans la liste des indices disponibles
+            // Sélectionne un indice d'upgrade aléatoire dans la liste des indices disponibles
             int randomUpgradeIndex = UnityEngine.Random.Range(0, availableUpgradeIndices.Count);
             int selectedUpgradeIndex = availableUpgradeIndices[randomUpgradeIndex];
 
-            // Sélectionnez l'upgrade correspondant à l'indice choisi
+            // Sélectionne l'upgrade correspondant à l'indice choisi
             GameObject selectedUpgrade = _shooterUpgrades[selectedUpgradeIndex];
 
             // Si le slot ou l'upgrade sélectionné est null, passez au suivant
@@ -171,11 +171,11 @@ public class ChoosingSkillsUI : NetworkBehaviour
                 continue;
             }
 
-            // Définissez le parent de l'upgrade comme le slot sélectionné
+            // Définisse le parent de l'upgrade comme le slot sélectionné
             selectedUpgrade.transform.SetParent(slot.transform, false);
             selectedUpgrade.gameObject.SetActive(true);
 
-            // Supprimez l'indice de la liste des indices disponibles pour éviter qu'il soit choisi à nouveau
+            // Supprime l'indice de la liste des indices disponibles pour éviter qu'il soit choisi à nouveau
             availableUpgradeIndices.RemoveAt(randomUpgradeIndex);
         }
     }

@@ -31,7 +31,6 @@ public class Mine : NetworkBehaviour
             Enemy enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                //enemy.SetCurrentHealthLossClientRpc(_mineDamage.value);
                 enemy.SetCurrentHealthLossServerRpc(_mineDamage.value);
                 enemy.GotHitServerRpc();
             }

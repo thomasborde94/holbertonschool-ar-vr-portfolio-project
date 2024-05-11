@@ -31,6 +31,7 @@ public class CharacterRoleSelect : MonoBehaviour
         UpdateIsSelected();
     }
 
+    // Display the "isSelected" icon on UI
     private void UpdateIsSelected()
     {
         if (TankstormGameMultiplayer.Instance.GetPlayerData().roleId == roleId)
