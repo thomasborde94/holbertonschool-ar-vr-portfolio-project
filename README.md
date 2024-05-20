@@ -10,7 +10,7 @@
 For this project, I chose to use Unity and C#, with Unity Lobby and Unity Relay services, as well as Netcode for Gameobjects.
 
 # How to play
-<p>You can download the game [here](https://drive.google.com/file/d/16jqo-QTC7rxMG5UmivJTrs7jepn6F3ue/view?usp=sharing).</p>
+You can download the game [here](https://drive.google.com/file/d/16jqo-QTC7rxMG5UmivJTrs7jepn6F3ue/view?usp=sharing).
 <p>Notably, there is at this time an issue where the host of the lobby should only play as the driver of the tank. If the host plays the shooter, there might be unexpected behaviors that I'm debbuging.</p>
 
 # Shortcuts
