@@ -11,6 +11,7 @@ For this project, I chose to use Unity and C#, with Unity Lobby and Unity Relay 
 
 # How to play
 You can download the game [here](https://drive.google.com/file/d/16jqo-QTC7rxMG5UmivJTrs7jepn6F3ue/view?usp=sharing).
+You can get a quick presentation of the game in french [here](https://www.youtube.com/watch?v=p9oWTDddw48).
 <p>Notably, there is at this time an issue where the host of the lobby should only play as the driver of the tank. If the host plays the shooter, there might be unexpected behaviors that I'm debbuging.</p>
 
 # Shortcuts
